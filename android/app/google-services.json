@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "942753625951",
+    "project_id": "zet-fire",
+    "storage_bucket": "zet-fire.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:942753625951:android:c45bbfbbdc5063f3c3a8ea",
+        "android_client_info": {
+          "package_name": "uz.nazirov.zet_fire.zet_fire"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "942753625951-2vrq234bpqfd457anakrm139sgqp6kji.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD_xLSboCt9ooOvyexRsNZVokaYNp3diLQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "942753625951-2vrq234bpqfd457anakrm139sgqp6kji.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "942753625951-a24g144i4bsq2itiipatjvd50ocbicom.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "uz.nazirov.zetfire.zetFire"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

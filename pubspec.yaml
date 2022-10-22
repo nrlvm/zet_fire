@@ -1,0 +1,52 @@
+name: zet_fire
+description: A new Flutter project.
+
+publish_to: 'none' # Remove this line if you wish to publish to pub.dev
+
+version: 1.0.0+1
+
+environment:
+  sdk: '>=2.18.2 <3.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+
+  cupertino_icons: ^1.0.2
+  firebase_core: ^1.24.0
+  firebase_messaging: ^13.1.0
+  firebase_database: ^9.1.7
+  cloud_firestore: ^3.5.1
+  shared_preferences: ^2.0.15
+  rxdart: ^0.27.5
+  flutter_slidable: ^2.0.0
+  firebase_auth: ^3.11.2
+  flutter_svg: ^1.1.5
+  pinput: ^2.2.16
+  image_picker: ^0.8.6
+  firebase_storage: ^10.3.11
+  cached_network_image: ^3.2.2
+  intl: ^0.17.0
+  shimmer: ^2.0.0
+
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+  flutter_lints: ^2.0.0
+
+flutter:
+
+  uses-material-design: true
+  assets:
+    - assets/icons/
+    - assets/bottom_icon/
+
+  fonts:
+    - family: Nunito
+      fonts:
+        - asset: assets/fonts/NunitoSans-Bold.ttf
+        - asset: assets/fonts/NunitoSans-SemiBold.ttf
+        - asset: assets/fonts/NunitoSans-Regular.ttf
