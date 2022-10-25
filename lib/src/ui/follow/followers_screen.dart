@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:zet_fire/src/bloc/follower_bloc.dart';
 import 'package:zet_fire/src/colors/app_color.dart';
-import 'package:zet_fire/src/model/follower_model.dart';
-import 'package:zet_fire/src/ui/main/profile/profile_screen.dart';
+import 'package:zet_fire/src/model/user_model.dart';
+import 'package:zet_fire/src/ui/main/profile/user_screen.dart';
 import 'package:zet_fire/src/utils/utils.dart';
+import 'package:zet_fire/src/widget/followers/followers_widget.dart';
 
 class FollowerScreen extends StatefulWidget {
   final String phoneNumber;
@@ -16,10 +18,18 @@ class FollowerScreen extends StatefulWidget {
 }
 
 class _FollowerScreenState extends State<FollowerScreen> {
+  String myPhoneNumber = '';
+
   @override
   void initState() {
-    followerBloc.getAllFollowers(widget.phoneNumber);
+    followerBloc.getAllFollowings(widget.phoneNumber);
+    getMyPhone();
     super.initState();
+  }
+
+  getMyPhone() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    myPhoneNumber = prefs.getString('phone_number') ?? '';
   }
 
   @override
@@ -53,49 +63,29 @@ class _FollowerScreenState extends State<FollowerScreen> {
           ),
         ),
       ),
-      body: StreamBuilder<List<FollowerModel>>(
-        stream: followerBloc.getFollowers,
+      body: StreamBuilder<List<UserModel>>(
+        stream: followerBloc.getFollowing,
         builder: (context, snapshot) {
           if (snapshot.hasData) {
-            List<FollowerModel> data = snapshot.data!;
+            List<UserModel> data = snapshot.data!;
             return ListView.builder(
               itemCount: data.length,
-              itemBuilder: (context, index) => GestureDetector(
+              padding: EdgeInsets.only(top: 16 * h),
+              itemBuilder: (context, index) => FollowersWidget(
+                user: data[index],
                 onTap: () {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
                       builder: (context) {
-                        return MyProfileScreen(
-                          phone: data[index].user1,
-                          phoneMe: data[index].user2,
+                        return UserScreen(
+                          userPhoneNumber: data[index].phone,
+                          myPhoneNumber: myPhoneNumber,
                         );
                       },
                     ),
                   );
                 },
-                child: Container(
-                  height: 56 * h,
-                  width: MediaQuery.of(context).size.width,
-                  margin: EdgeInsets.symmetric(horizontal: 25 * h),
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(14),
-                    color: AppColor.dark.withOpacity(0.7),
-                  ),
-                  child: Column(
-                    children: [
-                      Text(
-                        data[index].user1,
-                      ),
-                      Text(
-                        data[index].user2,
-                      ),
-                      Text(
-                        data[index].id,
-                      ),
-                    ],
-                  ),
-                ),
               ),
             );
           } else {

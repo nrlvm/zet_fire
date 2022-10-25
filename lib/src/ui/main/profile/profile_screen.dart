@@ -17,12 +17,12 @@ import 'package:zet_fire/src/widget/profile/profile_widget.dart';
 import 'package:zet_fire/src/colors/app_color.dart';
 
 class MyProfileScreen extends StatefulWidget {
-  final String phone;
+  // final String phone;
   final String phoneMe;
 
   const MyProfileScreen({
     Key? key,
-    required this.phone,
+    // required this.phone,
     required this.phoneMe,
   }) : super(key: key);
 
@@ -38,7 +38,7 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
   @override
   void initState() {
     profileBloc.allProfile(
-      widget.phone,
+      widget.phoneMe,
     );
     super.initState();
   }
@@ -105,7 +105,7 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                       context,
                       MaterialPageRoute(
                         builder: (context) => FollowerScreen(
-                          phoneNumber: widget.phone,
+                          phoneNumber: widget.phoneMe,
                         ),
                       ),
                     );

@@ -50,7 +50,6 @@ class _MainScreenState extends State<MainScreen> {
         const UploadScreen(),
         const AllChatsScreen(),
         MyProfileScreen(
-          phone: myPhone,
           phoneMe: myPhone,
         ),
       ][_selectedIndex],
