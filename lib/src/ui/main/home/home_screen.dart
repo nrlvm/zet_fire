@@ -5,6 +5,7 @@ import 'package:zet_fire/src/bloc/lenta_bloc.dart';
 import 'package:zet_fire/src/colors/app_color.dart';
 import 'package:zet_fire/src/model/lenta_model.dart';
 import 'package:zet_fire/src/ui/main/profile/profile_screen.dart';
+import 'package:zet_fire/src/ui/main/profile/user_screen.dart';
 import 'package:zet_fire/src/utils/utils.dart';
 import 'package:zet_fire/src/widget/app/shimmer.dart';
 import 'package:zet_fire/src/widget/lenta/lenta_widget.dart';
@@ -19,12 +20,12 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  String myPhone = '';
+  String myPhoneNumber = '';
 
   @override
   void initState() {
     lentaBloc.allLenta();
-    isMyAccount();
+    getMyPhone();
     super.initState();
   }
 
@@ -33,9 +34,9 @@ class _HomeScreenState extends State<HomeScreen> {
     super.dispose();
   }
 
-  isMyAccount() async {
+  getMyPhone() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    myPhone = prefs.getString('phone_number') ?? '';
+    myPhoneNumber = prefs.getString('phone_number') ?? '';
   }
 
   @override
@@ -89,15 +90,15 @@ class _HomeScreenState extends State<HomeScreen> {
                     return LentaWidget(
                       data: data[index],
                       onTap: () {
-                        if (data[index].userPhone == myPhone) {
+                        if (data[index].userPhone == myPhoneNumber) {
                           widget.change(4);
                         } else {
                           Navigator.push(
                             context,
                             MaterialPageRoute(
-                              builder: (context) => ProfileScreen(
-                                phone: data[index].userPhone,
-                                main: false,
+                              builder: (context) => UserScreen(
+                                userPhoneNumber: data[index].userPhone,
+                                myPhoneNumber: myPhoneNumber,
                               ),
                             ),
                           );

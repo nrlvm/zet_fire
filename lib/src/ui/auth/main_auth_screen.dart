@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:zet_fire/src/bloc/user_bloc.dart';
+import 'package:zet_fire/src/bloc/auth_bloc.dart';
 import 'package:zet_fire/src/colors/app_color.dart';
 import 'package:zet_fire/src/model/user_model.dart';
 import 'package:zet_fire/src/ui/auth/login_page.dart';
@@ -204,21 +204,23 @@ class _MainAuthScreenState extends State<MainAuthScreen> {
                   if (passwordLog.isNotEmpty && phoneLog.isNotEmpty) {
                     loading = true;
                     setState(() {});
-                    bool k = await userBloc.logIn(phoneLog, passwordLog);
-                    k == true
-                        ? Navigator.pushAndRemoveUntil(
-                            this.context,
-                            MaterialPageRoute(
-                              builder: (context) => const MainScreen(),
-                            ),
-                            (route) => false)
-                        : BottomWidget.modalBottom(
-                            'Login failed',
-                            'Either phone number or password wrong',
-                            h,
-                            w,
-                            this.context,
-                          );
+                    bool k = await authBloc.logIn(phoneLog, passwordLog);
+                    if (k == true) {
+                      Navigator.pushAndRemoveUntil(
+                          this.context,
+                          MaterialPageRoute(
+                            builder: (context) => const MainScreen(),
+                          ),
+                          (route) => false);
+                    } else {
+                      BottomWidget.modalBottom(
+                        'Login failed',
+                        'Either phone number or password wrong',
+                        h,
+                        w,
+                        this.context,
+                      );
+                    }
                     setState(() {
                       loading = false;
                     });
@@ -238,9 +240,9 @@ class _MainAuthScreenState extends State<MainAuthScreen> {
                     loading = true;
                     setState(() {});
                     bool alreadyUserNumber =
-                        await userBloc.numberAlreadyUser(phoneSign);
+                        await authBloc.numberAlreadyUser(phoneSign);
                     if (alreadyUserNumber == false) {
-                      userBloc.saveUser(
+                      authBloc.saveUser(
                         UserModel(
                           userName: usernameSign,
                           phone: phoneSign,

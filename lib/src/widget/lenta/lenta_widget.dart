@@ -5,15 +5,18 @@ import 'package:zet_fire/src/bloc/user_bloc.dart';
 import 'package:zet_fire/src/colors/app_color.dart';
 import 'package:zet_fire/src/model/lenta_model.dart';
 import 'package:zet_fire/src/model/user_model.dart';
-import 'package:zet_fire/src/ui/main/profile/profile_screen.dart';
 import 'package:zet_fire/src/utils/utils.dart';
 import 'package:zet_fire/src/widget/app/custom_network_image.dart';
 
 class LentaWidget extends StatefulWidget {
   final LentaModel data;
-  final Function()onTap;
+  final Function() onTap;
 
-  const LentaWidget({Key? key, required this.data, required this.onTap, }) : super(key: key);
+  const LentaWidget({
+    Key? key,
+    required this.data,
+    required this.onTap,
+  }) : super(key: key);
 
   @override
   State<LentaWidget> createState() => _LentaWidgetState();

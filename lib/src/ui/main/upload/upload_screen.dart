@@ -132,12 +132,13 @@ class _UploadScreenState extends State<UploadScreen> {
               } else if (image != null && captionController.text.isNotEmpty) {
                 loading = true;
                 setState(() {});
-                SharedPreferences prefs = await SharedPreferences.getInstance();
                 String url = await storageFirebase.upload("lenta", image!);
+                SharedPreferences prefs = await SharedPreferences.getInstance();
+                
                 lentaBloc.postPublication(
                   LentaModel(
                     url: url,
-                    userPhone: prefs.getString('phone_number') ?? '',
+                    userPhone: prefs.getString('phone_number')??'',
                     time: DateTime.now().millisecondsSinceEpoch,
                     caption: captionController.text,
                   ),

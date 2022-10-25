@@ -6,23 +6,25 @@ import 'package:zet_fire/src/utils/utils.dart';
 import 'package:zet_fire/src/widget/app/custom_network_image.dart';
 
 class ProfileWidget extends StatelessWidget {
-  final UserModel data;
-  final int publications;
-  final Function() onTap;
-  final Function() follow;
+  final UserModel userModel;
+  final int publicationCount;
   final bool isLoading;
   final bool myProfile;
   final bool isFollowed;
+  final Function() changePhoto;
+  final Function() follow;
+  final Function() onTapFollowing;
 
   const ProfileWidget({
     Key? key,
-    required this.data,
-    required this.publications,
-    required this.onTap,
+    required this.userModel,
+    required this.publicationCount,
+    required this.changePhoto,
     required this.isLoading,
     required this.myProfile,
     required this.isFollowed,
     required this.follow,
+    required this.onTapFollowing,
   }) : super(key: key);
 
   @override
@@ -57,7 +59,7 @@ class ProfileWidget extends StatelessWidget {
                           color: AppColor.dark.withOpacity(0.5),
                         ),
                       ),
-                      child: data.userPhoto == ''
+                      child: userModel.userPhoto == ''
                           ? Center(
                               child: SvgPicture.asset(
                                 'assets/icons/user.svg',
@@ -71,13 +73,13 @@ class ProfileWidget extends StatelessWidget {
                               borderRadius: BorderRadius.circular(90),
                               height: 86 * h,
                               width: 86 * h,
-                              image: data.userPhoto,
+                              image: userModel.userPhoto,
                               boxFit: BoxFit.cover,
                             ),
                     ),
                     myProfile == true
                         ? GestureDetector(
-                            onTap: onTap,
+                            onTap: changePhoto,
                             child: Container(
                               height: 36 * h,
                               width: 36 * h,
@@ -119,22 +121,22 @@ class ProfileWidget extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    data.name.isEmpty ? 'Set Name' : data.name,
+                    userModel.name.isEmpty ? 'Set Name' : userModel.name,
                     style: TextStyle(
                       fontFamily: AppColor.fontFamily,
                       fontWeight: FontWeight.w700,
                       fontSize: 20 * h,
                       height: 33 / 20,
-                      decoration: data.name.isEmpty
+                      decoration: userModel.name.isEmpty
                           ? TextDecoration.underline
                           : TextDecoration.none,
-                      color: data.name.isEmpty
+                      color: userModel.name.isEmpty
                           ? AppColor.dark.withOpacity(0.4)
                           : AppColor.dark,
                     ),
                   ),
                   Text(
-                    data.userName,
+                    userModel.userName,
                     style: TextStyle(
                       fontFamily: AppColor.fontFamily,
                       fontWeight: FontWeight.w700,
@@ -147,7 +149,7 @@ class ProfileWidget extends StatelessWidget {
                     height: 6 * h,
                   ),
                   Text(
-                    data.city.isEmpty ? 'not specified' : data.city,
+                    userModel.city.isEmpty ? 'not specified' : userModel.city,
                     style: TextStyle(
                       fontFamily: AppColor.fontFamily,
                       fontWeight: FontWeight.w400,
@@ -224,7 +226,7 @@ class ProfileWidget extends StatelessWidget {
                     ],
                   ),
                 )
-              : SizedBox(),
+              : const SizedBox(),
           Container(
             padding: EdgeInsets.symmetric(
               vertical: 18 * h,
@@ -237,86 +239,98 @@ class ProfileWidget extends StatelessWidget {
             child: Row(
               children: [
                 Expanded(
-                  child: Column(
-                    children: [
-                      Text(
-                        publications.toString(),
-                        style: TextStyle(
-                          fontFamily: AppColor.fontFamily,
-                          fontWeight: FontWeight.w700,
-                          fontSize: 20 * h,
-                          height: 33 / 20,
-                          color: AppColor.dark,
+                  child: Container(
+                    color: Colors.transparent,
+                    child: Column(
+                      children: [
+                        Text(
+                          publicationCount.toString(),
+                          style: TextStyle(
+                            fontFamily: AppColor.fontFamily,
+                            fontWeight: FontWeight.w700,
+                            fontSize: 20 * h,
+                            height: 33 / 20,
+                            color: AppColor.dark,
+                          ),
                         ),
-                      ),
-                      Text(
-                        'Publications',
-                        style: TextStyle(
-                          fontFamily: AppColor.fontFamily,
-                          fontWeight: FontWeight.w400,
-                          fontSize: 14 * h,
-                          height: 24 / 14,
-                          color: AppColor.dark.withOpacity(0.8),
+                        Text(
+                          'Publications',
+                          style: TextStyle(
+                            fontFamily: AppColor.fontFamily,
+                            fontWeight: FontWeight.w400,
+                            fontSize: 14 * h,
+                            height: 24 / 14,
+                            color: AppColor.dark.withOpacity(0.8),
+                          ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
                 Expanded(
-                  child: Column(
-                    children: [
-                      Text(
-                        data.followersCount.toString(),
-                        style: TextStyle(
-                          fontFamily: AppColor.fontFamily,
-                          fontWeight: FontWeight.w700,
-                          fontSize: 20 * h,
-                          height: 33 / 20,
-                          color: AppColor.dark,
+                  child: Container(
+                    color: Colors.transparent,
+                    child: Column(
+                      children: [
+                        Text(
+                          userModel.followersCount.toString(),
+                          style: TextStyle(
+                            fontFamily: AppColor.fontFamily,
+                            fontWeight: FontWeight.w700,
+                            fontSize: 20 * h,
+                            height: 33 / 20,
+                            color: AppColor.dark,
+                          ),
                         ),
-                      ),
-                      Text(
-                        'Followers',
-                        style: TextStyle(
-                          fontFamily: AppColor.fontFamily,
-                          fontWeight: FontWeight.w400,
-                          fontSize: 14 * h,
-                          height: 24 / 14,
-                          color: AppColor.dark.withOpacity(0.8),
+                        Text(
+                          'Followers',
+                          style: TextStyle(
+                            fontFamily: AppColor.fontFamily,
+                            fontWeight: FontWeight.w400,
+                            fontSize: 14 * h,
+                            height: 24 / 14,
+                            color: AppColor.dark.withOpacity(0.8),
+                          ),
                         ),
-                      ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
                 Expanded(
-                  child: Column(
-                    children: [
-                      Text(
-                        data.followingCount.toString(),
-                        style: TextStyle(
-                          fontFamily: AppColor.fontFamily,
-                          fontWeight: FontWeight.w700,
-                          fontSize: 20 * h,
-                          height: 33 / 20,
-                          color: AppColor.dark,
-                        ),
+                  child: GestureDetector(
+                    onTap: onTapFollowing,
+                    child: Container(
+                      color: Colors.transparent,
+                      child: Column(
+                        children: [
+                          Text(
+                            userModel.followingCount.toString(),
+                            style: TextStyle(
+                              fontFamily: AppColor.fontFamily,
+                              fontWeight: FontWeight.w700,
+                              fontSize: 20 * h,
+                              height: 33 / 20,
+                              color: AppColor.dark,
+                            ),
+                          ),
+                          Text(
+                            'Following',
+                            style: TextStyle(
+                              fontFamily: AppColor.fontFamily,
+                              fontWeight: FontWeight.w400,
+                              fontSize: 14 * h,
+                              height: 24 / 14,
+                              color: AppColor.dark.withOpacity(0.8),
+                            ),
+                          ),
+                        ],
                       ),
-                      Text(
-                        'Following',
-                        style: TextStyle(
-                          fontFamily: AppColor.fontFamily,
-                          fontWeight: FontWeight.w400,
-                          fontSize: 14 * h,
-                          height: 24 / 14,
-                          color: AppColor.dark.withOpacity(0.8),
-                        ),
-                      ),
-                    ],
+                    ),
                   ),
                 ),
               ],
             ),
-          )
+          ),
         ],
       ),
     );

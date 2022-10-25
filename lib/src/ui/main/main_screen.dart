@@ -10,25 +10,29 @@ import 'package:zet_fire/src/ui/main/upload/upload_screen.dart';
 import 'package:zet_fire/src/utils/utils.dart';
 
 class MainScreen extends StatefulWidget {
-  const MainScreen({Key? key}) : super(key: key);
+  const MainScreen({
+    Key? key,
+  }) : super(key: key);
 
   @override
   State<MainScreen> createState() => _MainScreenState();
 }
 
 int _selectedIndex = 0;
-String phoneNumber = '';
 
 class _MainScreenState extends State<MainScreen> {
+  String myPhone = '';
+
   @override
   void initState() {
     getPhoneNum();
+
     super.initState();
   }
 
   getPhoneNum() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
-    phoneNumber = prefs.getString('phone_number') ?? '';
+    myPhone = prefs.getString('phone_number') ?? '';
   }
 
   @override
@@ -45,9 +49,9 @@ class _MainScreenState extends State<MainScreen> {
         const ExploreScreen(),
         const UploadScreen(),
         const AllChatsScreen(),
-        ProfileScreen(
-          phone: phoneNumber,
-          main: true,
+        MyProfileScreen(
+          phone: myPhone,
+          phoneMe: myPhone,
         ),
       ][_selectedIndex],
       bottomNavigationBar: SizedBox(

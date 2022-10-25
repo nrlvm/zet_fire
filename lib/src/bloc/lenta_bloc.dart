@@ -11,21 +11,10 @@ class LentaBloc {
   allLenta() async {
     List<LentaModel> lenta = await lcf.getAllPublications();
     List<LentaModel> data = [];
-    for(int i = lenta.length -1; i >=0; i --){
+    for (int i = lenta.length - 1; i >= 0; i--) {
       data.add(lenta[i]);
     }
     _fetchLenta.sink.add(data);
-  }
-
-  Future<List<LentaModel>> profileLenta(String phone) async {
-    List<LentaModel> data = await lcf.getAllPublications();
-    List<LentaModel> profileLenta = [];
-    for (int i = 0; i < data.length; i++) {
-      if (data[i].userPhone == phone) {
-        profileLenta.add(data[i]);
-      }
-    }
-    return profileLenta;
   }
 
   postPublication(LentaModel lentaModel) async {

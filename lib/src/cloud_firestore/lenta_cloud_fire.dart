@@ -20,5 +20,18 @@ class LentaCloudFire {
     }
     return lentaList;
   }
+
+  Future<List<LentaModel>> getMyPublications(String number) async {
+    var data = await _collection.where("phone", isEqualTo: number).get();
+    List<LentaModel> lentaList = [];
+    for (int i = 0; i < data.docs.length; i++) {
+      LentaModel lenta =
+          LentaModel.fromJson(data.docs[i].data() as Map<String, dynamic>);
+      lenta.id = data.docs[i].id;
+      lentaList.add(lenta);
+    }
+    return lentaList;
+  }
 }
+
 final lentaCloudFire = LentaCloudFire();

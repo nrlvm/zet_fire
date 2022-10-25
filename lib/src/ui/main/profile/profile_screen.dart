@@ -6,37 +6,40 @@ import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:zet_fire/src/bloc/profile_bloc.dart';
-import 'package:zet_fire/src/bloc/user_bloc.dart';
+import 'package:zet_fire/src/bloc/auth_bloc.dart';
 import 'package:zet_fire/src/model/profile_model.dart';
 import 'package:zet_fire/src/storage/storage_firebase.dart';
+import 'package:zet_fire/src/ui/follow/followers_screen.dart';
 import 'package:zet_fire/src/ui/main/profile/settings_screen.dart';
 import 'package:zet_fire/src/utils/utils.dart';
 import 'package:zet_fire/src/widget/app/custom_network_image.dart';
 import 'package:zet_fire/src/widget/profile/profile_widget.dart';
 import 'package:zet_fire/src/colors/app_color.dart';
 
-class ProfileScreen extends StatefulWidget {
+class MyProfileScreen extends StatefulWidget {
   final String phone;
-  final bool main;
+  final String phoneMe;
 
-  const ProfileScreen({
+  const MyProfileScreen({
     Key? key,
     required this.phone,
-    required this.main,
+    required this.phoneMe,
   }) : super(key: key);
 
   @override
-  State<ProfileScreen> createState() => _ProfileScreenState();
+  State<MyProfileScreen> createState() => _MyProfileScreenState();
 }
 
-class _ProfileScreenState extends State<ProfileScreen> {
+class _MyProfileScreenState extends State<MyProfileScreen> {
   bool followed = false;
   final _gridCount = 2;
   bool loading = false;
 
   @override
   void initState() {
-    profileBloc.allProfile(widget.phone);
+    profileBloc.allProfile(
+      widget.phone,
+    );
     super.initState();
   }
 
@@ -52,20 +55,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
           return Scaffold(
             appBar: AppBar(
               automaticallyImplyLeading: false,
-              leading: widget.main == true
-                  ? null
-                  : GestureDetector(
-                      onTap: () {
-                        Navigator.pop(context);
-                      },
-                      child: Container(
-                        color: Colors.transparent,
-                        child: SvgPicture.asset(
-                          'assets/icons/arrow_left.svg',
-                          fit: BoxFit.none,
-                        ),
-                      ),
-                    ),
               backgroundColor: AppColor.appbar,
               elevation: 1,
               centerTitle: false,
@@ -79,27 +68,25 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 ),
               ),
               actions: [
-                widget.main == true
-                    ? GestureDetector(
-                        onTap: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => SettingsScreen(
-                                data: profile.user,
-                              ),
-                            ),
-                          );
-                        },
-                        child: Container(
-                          color: Colors.transparent,
-                          child: SvgPicture.asset(
-                            'assets/icons/settings.svg',
-                            color: AppColor.dark,
-                          ),
+                GestureDetector(
+                  onTap: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => SettingsScreen(
+                          data: profile.user,
                         ),
-                      )
-                    : const SizedBox(),
+                      ),
+                    );
+                  },
+                  child: Container(
+                    color: Colors.transparent,
+                    child: SvgPicture.asset(
+                      'assets/icons/settings.svg',
+                      color: AppColor.dark,
+                    ),
+                  ),
+                ),
                 SizedBox(
                   width: 16 * h,
                 ),
@@ -109,15 +96,22 @@ class _ProfileScreenState extends State<ProfileScreen> {
               children: [
                 ProfileWidget(
                   isFollowed: followed,
-                  myProfile: widget.main,
-                  data: profile.user,
-                  publications: profile.lenta.length,
+                  myProfile: true,
+                  userModel: profile.user,
+                  publicationCount: profile.lenta.length,
                   isLoading: loading,
-                  follow: () {
-                    followed = !followed;
-                    setState(() {});
+                  onTapFollowing: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => FollowerScreen(
+                          phoneNumber: widget.phone,
+                        ),
+                      ),
+                    );
                   },
-                  onTap: () {
+                  follow: () {},
+                  changePhoto: () {
                     showCupertinoModalPopup(
                       context: context,
                       builder: (context) => CupertinoActionSheet(
@@ -145,7 +139,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                   image!,
                                 );
                                 profile.user.userPhoto = url;
-                                userBloc.updateUser(profile.user);
+                                authBloc.updateUser(profile.user);
                                 Timer(const Duration(milliseconds: 700), () {
                                   loading = false;
                                   setState(() {});
@@ -165,7 +159,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                   profile.user.userPhoto,
                                 );
                                 profile.user.userPhoto = '';
-                                userBloc.updateUser(profile.user);
+                                authBloc.updateUser(profile.user);
                               }
                               Navigator.pop(context);
                               loading = false;
@@ -243,20 +237,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
             elevation: 1,
             centerTitle: false,
             automaticallyImplyLeading: false,
-            leading: widget.main == true
-                ? null
-                : GestureDetector(
-                    onTap: () {
-                      Navigator.pop(context);
-                    },
-                    child: Container(
-                      color: Colors.transparent,
-                      child: SvgPicture.asset(
-                        'assets/icons/arrow_left.svg',
-                        fit: BoxFit.none,
-                      ),
-                    ),
-                  ),
             title: Text(
               'Profile',
               style: TextStyle(

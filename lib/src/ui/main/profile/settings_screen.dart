@@ -4,7 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:zet_fire/src/bloc/user_bloc.dart';
+import 'package:zet_fire/src/bloc/auth_bloc.dart';
 import 'package:zet_fire/src/colors/app_color.dart';
 import 'package:zet_fire/src/fire_auth/auth_user_repository.dart';
 import 'package:zet_fire/src/model/user_model.dart';
@@ -321,7 +321,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     model.name = nameController.text;
                     model.userName = userNameController.text;
                     model.city = cityController.text;
-                    userBloc.updateUser(model);
+                    authBloc.updateUser(model);
                     Navigator.pop(context);
                   } else {
                     BottomWidget.modalBottom(
