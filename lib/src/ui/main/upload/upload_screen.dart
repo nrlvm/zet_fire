@@ -87,7 +87,7 @@ class _UploadScreenState extends State<UploadScreen> {
                       borderRadius: BorderRadius.circular(8),
                       child: Image.file(
                         File(image!.path),
-                        height: 450  * h,
+                        height: 450 * h,
                         fit: BoxFit.cover,
                       ),
                     ),
@@ -123,7 +123,7 @@ class _UploadScreenState extends State<UploadScreen> {
             onTap: () async {
               if (image == null || captionController.text.isEmpty) {
                 BottomWidget.modalBottom(
-                  image == null ?'Choose photo':'Write caption',
+                  image == null ? 'Choose photo' : 'Write caption',
                   'msg',
                   h,
                   w,
@@ -134,14 +134,15 @@ class _UploadScreenState extends State<UploadScreen> {
                 setState(() {});
                 String url = await storageFirebase.upload("lenta", image!);
                 SharedPreferences prefs = await SharedPreferences.getInstance();
-                
+                String phoneMe = prefs.getString('phone_number') ?? '';
                 lentaBloc.postPublication(
                   LentaModel(
                     url: url,
-                    userPhone: prefs.getString('phone_number')??'',
+                    userPhone: prefs.getString('phone_number') ?? '',
                     time: DateTime.now().millisecondsSinceEpoch,
                     caption: captionController.text,
                   ),
+                  phoneMe,
                 );
                 loading = false;
                 image = null;

@@ -14,6 +14,7 @@ class ProfileWidget extends StatelessWidget {
   final Function() changePhoto;
   final Function() follow;
   final Function() onTapFollowing;
+  final Function() onTapFollowers;
 
   const ProfileWidget({
     Key? key,
@@ -25,6 +26,7 @@ class ProfileWidget extends StatelessWidget {
     required this.isFollowed,
     required this.follow,
     required this.onTapFollowing,
+    required this.onTapFollowers,
   }) : super(key: key);
 
   @override
@@ -121,7 +123,11 @@ class ProfileWidget extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    userModel.name.isEmpty ? 'Set Name' : userModel.name,
+                    userModel.name.isNotEmpty
+                        ? userModel.name
+                        : myProfile == true
+                            ? 'Set Name'
+                            : '',
                     style: TextStyle(
                       fontFamily: AppColor.fontFamily,
                       fontWeight: FontWeight.w700,
@@ -268,31 +274,34 @@ class ProfileWidget extends StatelessWidget {
                   ),
                 ),
                 Expanded(
-                  child: Container(
-                    color: Colors.transparent,
-                    child: Column(
-                      children: [
-                        Text(
-                          userModel.followersCount.toString(),
-                          style: TextStyle(
-                            fontFamily: AppColor.fontFamily,
-                            fontWeight: FontWeight.w700,
-                            fontSize: 20 * h,
-                            height: 33 / 20,
-                            color: AppColor.dark,
+                  child: GestureDetector(
+                    onTap: onTapFollowers,
+                    child: Container(
+                      color: Colors.transparent,
+                      child: Column(
+                        children: [
+                          Text(
+                            userModel.followersCount.toString(),
+                            style: TextStyle(
+                              fontFamily: AppColor.fontFamily,
+                              fontWeight: FontWeight.w700,
+                              fontSize: 20 * h,
+                              height: 33 / 20,
+                              color: AppColor.dark,
+                            ),
                           ),
-                        ),
-                        Text(
-                          'Followers',
-                          style: TextStyle(
-                            fontFamily: AppColor.fontFamily,
-                            fontWeight: FontWeight.w400,
-                            fontSize: 14 * h,
-                            height: 24 / 14,
-                            color: AppColor.dark.withOpacity(0.8),
+                          Text(
+                            'Followers',
+                            style: TextStyle(
+                              fontFamily: AppColor.fontFamily,
+                              fontWeight: FontWeight.w400,
+                              fontSize: 14 * h,
+                              height: 24 / 14,
+                              color: AppColor.dark.withOpacity(0.8),
+                            ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
                   ),
                 ),

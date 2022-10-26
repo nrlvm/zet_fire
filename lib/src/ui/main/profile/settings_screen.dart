@@ -112,17 +112,16 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   ),
                 );
               },
-              child: Center(
-                child: Container(
-                  color: Colors.transparent,
-                  child: Text(
-                    'Sign Out',
-                    style: TextStyle(
-                      fontFamily: AppColor.fontFamily,
-                      fontWeight: FontWeight.w700,
-                      fontSize: 16 * h,
-                      color: AppColor.red,
-                    ),
+              child: Container(
+                alignment: AlignmentDirectional.center,
+                color: Colors.transparent,
+                child: Text(
+                  'Sign Out',
+                  style: TextStyle(
+                    fontFamily: AppColor.fontFamily,
+                    fontWeight: FontWeight.w700,
+                    fontSize: 16 * h,
+                    color: AppColor.red,
                   ),
                 ),
               ),

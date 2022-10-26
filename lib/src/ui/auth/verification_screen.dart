@@ -7,6 +7,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:zet_fire/src/colors/app_color.dart';
 import 'package:zet_fire/src/fire_auth/auth_user_repository.dart';
 import 'package:zet_fire/src/ui/main/home/home_screen.dart';
+import 'package:zet_fire/src/ui/main/main_screen.dart';
 import 'package:zet_fire/src/utils/utils.dart';
 
 class VerificationScreen extends StatefulWidget {
@@ -145,9 +146,7 @@ class _VerificationScreenState extends State<VerificationScreen> {
                   Navigator.pushAndRemoveUntil(
                       this.context,
                       MaterialPageRoute(
-                        builder: (context) => HomeScreen(
-                          change: (int id) {},
-                        ),
+                        builder: (context) => const MainScreen(),
                       ),
                       (route) => false);
                 }

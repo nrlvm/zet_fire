@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:zet_fire/src/colors/app_color.dart';
 import 'package:zet_fire/src/model/user_model.dart';
 import 'package:zet_fire/src/utils/utils.dart';
@@ -22,7 +23,7 @@ class FollowersWidget extends StatelessWidget {
       onTap: onTap,
       child: Container(
         width: MediaQuery.of(context).size.width,
-        margin: EdgeInsets.only(left: 16 * w,right: 16 * w,bottom: 16 * h),
+        margin: EdgeInsets.only(left: 16 * w, right: 16 * w, bottom: 16 * h),
         padding: EdgeInsets.symmetric(horizontal: 16 * w, vertical: 12 * h),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(16),
@@ -35,13 +36,33 @@ class FollowersWidget extends StatelessWidget {
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            CustomNetworkImage(
-              height: 36 * h,
-              width: 36 * h,
-              image: user.userPhoto,
-              boxFit: BoxFit.cover,
-              borderRadius: BorderRadius.circular(36),
-            ),
+            user.userPhoto.isNotEmpty
+                ? CustomNetworkImage(
+                    height: 36 * h,
+                    width: 36 * h,
+                    image: user.userPhoto,
+                    boxFit: BoxFit.cover,
+                    borderRadius: BorderRadius.circular(36),
+                  )
+                : Container(
+                    height: 36 * h,
+                    width: 36 * h,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(36),
+                      border: Border.all(
+                        color: AppColor.dark.withOpacity(0.5),
+                      ),
+                    ),
+                    child: Center(
+                      child: SvgPicture.asset(
+                        'assets/icons/user.svg',
+                        height: 36 * h,
+                        width: 36 * h,
+                        fit: BoxFit.scaleDown,
+                        color: AppColor.dark.withOpacity(0.2),
+                      ),
+                    ),
+                  ),
             SizedBox(
               width: 14 * h,
             ),
@@ -50,7 +71,7 @@ class FollowersWidget extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    user.name,
+                    user.name == ''? 'No name':user.name,
                     style: TextStyle(
                       fontFamily: AppColor.fontFamily,
                       fontWeight: FontWeight.w600,

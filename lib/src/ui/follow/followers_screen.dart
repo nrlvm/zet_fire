@@ -10,8 +10,13 @@ import 'package:zet_fire/src/widget/followers/followers_widget.dart';
 
 class FollowerScreen extends StatefulWidget {
   final String phoneNumber;
+  final bool following;
 
-  const FollowerScreen({Key? key, required this.phoneNumber}) : super(key: key);
+  const FollowerScreen({
+    Key? key,
+    required this.phoneNumber,
+    required this.following,
+  }) : super(key: key);
 
   @override
   State<FollowerScreen> createState() => _FollowerScreenState();
@@ -22,7 +27,11 @@ class _FollowerScreenState extends State<FollowerScreen> {
 
   @override
   void initState() {
-    followerBloc.getAllFollowings(widget.phoneNumber);
+    if (widget.following == true) {
+      followerBloc.getAllFollowings(widget.phoneNumber);
+    } else {
+      followerBloc.getAllFollowers(widget.phoneNumber);
+    }
     getMyPhone();
     super.initState();
   }
@@ -54,7 +63,7 @@ class _FollowerScreenState extends State<FollowerScreen> {
         elevation: 1,
         centerTitle: false,
         title: Text(
-          'Following',
+          widget.following ? 'Following' : 'Followers',
           style: TextStyle(
             fontFamily: AppColor.fontFamily,
             fontWeight: FontWeight.w700,
@@ -64,7 +73,9 @@ class _FollowerScreenState extends State<FollowerScreen> {
         ),
       ),
       body: StreamBuilder<List<UserModel>>(
-        stream: followerBloc.getFollowing,
+        stream: widget.following
+            ? followerBloc.getFollowing
+            : followerBloc.getFollowers,
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             List<UserModel> data = snapshot.data!;
@@ -74,7 +85,8 @@ class _FollowerScreenState extends State<FollowerScreen> {
               itemBuilder: (context, index) => FollowersWidget(
                 user: data[index],
                 onTap: () {
-                  Navigator.push(
+                  Navigator.pop(context);
+                  Navigator.pushReplacement(
                     context,
                     MaterialPageRoute(
                       builder: (context) {
@@ -89,7 +101,13 @@ class _FollowerScreenState extends State<FollowerScreen> {
               ),
             );
           } else {
-            return Container();
+            return Center(
+              child: SizedBox(
+                height: 36 * h,
+                width: 36 * h,
+                child: const CircularProgressIndicator(),
+              ),
+            );
           }
         },
       ),

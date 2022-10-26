@@ -18,15 +18,13 @@ class MainScreen extends StatefulWidget {
   State<MainScreen> createState() => _MainScreenState();
 }
 
-int _selectedIndex = 0;
-
 class _MainScreenState extends State<MainScreen> {
+  int _selectedIndex = 0;
   String myPhone = '';
 
   @override
   void initState() {
     getPhoneNum();
-
     super.initState();
   }
 
@@ -41,6 +39,7 @@ class _MainScreenState extends State<MainScreen> {
     return Scaffold(
       body: [
         HomeScreen(
+          phone: myPhone,
           change: (int id) {
             _selectedIndex = id;
             setState(() {});
@@ -97,7 +96,7 @@ class _MainScreenState extends State<MainScreen> {
                         ),
                 ],
               ),
-              label: 'asd',
+              label: '',
             ),
             BottomNavigationBarItem(
               icon: Column(
@@ -123,7 +122,7 @@ class _MainScreenState extends State<MainScreen> {
                         ),
                 ],
               ),
-              label: 'asd',
+              label: '',
             ),
             BottomNavigationBarItem(
               icon: Column(
@@ -149,7 +148,7 @@ class _MainScreenState extends State<MainScreen> {
                         ),
                 ],
               ),
-              label: 'asd',
+              label: '',
             ),
             BottomNavigationBarItem(
               icon: Column(
@@ -175,7 +174,7 @@ class _MainScreenState extends State<MainScreen> {
                         ),
                 ],
               ),
-              label: 'asd',
+              label: '',
             ),
             BottomNavigationBarItem(
               icon: Column(
@@ -201,7 +200,7 @@ class _MainScreenState extends State<MainScreen> {
                         ),
                 ],
               ),
-              label: 'asd',
+              label: '',
             ),
           ],
         ),

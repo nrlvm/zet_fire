@@ -10,11 +10,12 @@ class LentaCloudFire {
   }
 
   Future<List<LentaModel>> getAllPublications() async {
-    var data = await _collection.get();
+    var data = await _collection.orderBy('time', descending: true).get();
     List<LentaModel> lentaList = [];
     for (int i = 0; i < data.docs.length; i++) {
-      LentaModel lenta =
-          LentaModel.fromJson(data.docs[i].data() as Map<String, dynamic>);
+      LentaModel lenta = LentaModel.fromJson(
+        data.docs[i].data() as Map<String, dynamic>,
+      );
       lenta.id = data.docs[i].id;
       lentaList.add(lenta);
     }

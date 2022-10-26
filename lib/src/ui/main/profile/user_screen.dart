@@ -5,6 +5,7 @@ import 'package:zet_fire/src/bloc/follower_bloc.dart';
 import 'package:zet_fire/src/bloc/user_bloc.dart';
 import 'package:zet_fire/src/colors/app_color.dart';
 import 'package:zet_fire/src/model/profile_model.dart';
+import 'package:zet_fire/src/ui/follow/followers_screen.dart';
 import 'package:zet_fire/src/utils/utils.dart';
 import 'package:zet_fire/src/widget/app/custom_network_image.dart';
 import 'package:zet_fire/src/widget/profile/profile_widget.dart';
@@ -38,6 +39,7 @@ class _UserScreenState extends State<UserScreen> {
     double h = Utils.height(context);
     double w = Utils.width(context);
     return Scaffold(
+      backgroundColor: AppColor.white,
       appBar: AppBar(
         automaticallyImplyLeading: false,
         leading: GestureDetector(
@@ -95,7 +97,28 @@ class _UserScreenState extends State<UserScreen> {
                       }
                       setState(() {});
                     },
-                    onTapFollowing: () {},
+                    onTapFollowing: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => FollowerScreen(
+                            phoneNumber: widget.userPhoneNumber,
+                            following: true,
+                          ),
+                        ),
+                      );
+                    },
+                    onTapFollowers: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => FollowerScreen(
+                            phoneNumber: widget.userPhoneNumber,
+                            following: false,
+                          ),
+                        ),
+                      );
+                    },
                   ),
                   ListView.builder(
                     itemCount: (profileModel.lenta.length + _gridCount + 1) ~/
@@ -148,10 +171,12 @@ class _UserScreenState extends State<UserScreen> {
               ),
             );
           }
-          return Container(
-            height: 120 * h,
-            width: MediaQuery.of(context).size.width,
-            color: AppColor.blue,
+          return Center(
+            child: SizedBox(
+              height: 36 * h,
+              width: 36 * h,
+              child: const CircularProgressIndicator(),
+            ),
           );
         },
       ),
@@ -160,7 +185,7 @@ class _UserScreenState extends State<UserScreen> {
 
   _onRefresh() async {
     userBloc.userInfo(widget.userPhoneNumber, widget.myPhoneNumber);
-    await Future.delayed(const Duration(milliseconds: 1));
+    await Future.delayed(const Duration(milliseconds: 1000));
     refreshController.refreshCompleted();
   }
 }

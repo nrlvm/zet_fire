@@ -42,7 +42,6 @@ class _LentaWidgetState extends State<LentaWidget> {
     String date = DateFormat('dd-MMM-yyy').format(time);
     double h = Utils.height(context);
     double w = Utils.width(context);
-
     return Container(
       width: MediaQuery.of(context).size.width,
       margin: EdgeInsets.only(

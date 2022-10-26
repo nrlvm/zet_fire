@@ -1,5 +1,8 @@
 import 'package:rxdart/rxdart.dart';
+import 'package:zet_fire/src/bloc/follower_bloc.dart';
+import 'package:zet_fire/src/cloud_firestore/follower_cloud_fire.dart';
 import 'package:zet_fire/src/cloud_firestore/lenta_cloud_fire.dart';
+import 'package:zet_fire/src/model/follower_model.dart';
 import 'package:zet_fire/src/model/lenta_model.dart';
 
 class LentaBloc {
@@ -8,18 +11,27 @@ class LentaBloc {
 
   Stream<List<LentaModel>> get getLenta => _fetchLenta.stream;
 
-  allLenta() async {
+  allLenta(String phone) async {
     List<LentaModel> lenta = await lcf.getAllPublications();
-    List<LentaModel> data = [];
-    for (int i = lenta.length - 1; i >= 0; i--) {
-      data.add(lenta[i]);
+    List<FollowerModel> followed = await followerCloudFire.allUser1(phone);
+    List<LentaModel> lateLenta = [];
+    if (followed.isEmpty) {
+      _fetchLenta.sink.add(lenta);
+    } else {
+      for (int i = 0; i < lenta.length; i++) {
+        for (int j = 0; j < followed.length; j++) {
+          if (lenta[i].userPhone == followed[j].user2) {
+            lateLenta.add(lenta[i]);
+          }
+        }
+      }
+      _fetchLenta.sink.add(lateLenta);
     }
-    _fetchLenta.sink.add(data);
   }
 
-  postPublication(LentaModel lentaModel) async {
+  postPublication(LentaModel lentaModel, String phone) async {
     await lcf.postPublication(lentaModel);
-    allLenta();
+    allLenta(phone);
   }
 }
 

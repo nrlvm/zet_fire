@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:zet_fire/src/bloc/lenta_bloc.dart';
 import 'package:zet_fire/src/colors/app_color.dart';
 import 'package:zet_fire/src/model/lenta_model.dart';
-import 'package:zet_fire/src/ui/main/profile/profile_screen.dart';
 import 'package:zet_fire/src/ui/main/profile/user_screen.dart';
 import 'package:zet_fire/src/utils/utils.dart';
 import 'package:zet_fire/src/widget/app/shimmer.dart';
@@ -12,20 +11,21 @@ import 'package:zet_fire/src/widget/lenta/lenta_widget.dart';
 
 class HomeScreen extends StatefulWidget {
   final Function(int id) change;
+  final String phone;
 
-  const HomeScreen({Key? key, required this.change}) : super(key: key);
+  const HomeScreen({Key? key, required this.change, required this.phone})
+      : super(key: key);
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  String myPhoneNumber = '';
+  final refresher = RefreshController(initialRefresh: false);
 
   @override
   void initState() {
-    lentaBloc.allLenta();
-    getMyPhone();
+    lentaBloc.allLenta(widget.phone);
     super.initState();
   }
 
@@ -34,10 +34,6 @@ class _HomeScreenState extends State<HomeScreen> {
     super.dispose();
   }
 
-  getMyPhone() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    myPhoneNumber = prefs.getString('phone_number') ?? '';
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -72,42 +68,47 @@ class _HomeScreenState extends State<HomeScreen> {
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             List<LentaModel> data = snapshot.data!;
-            return ListView(
-              children: [
-                SizedBox(
-                  height: 148 * h,
-                  width: MediaQuery.of(context).size.width,
-                  child: ListView(
-                    scrollDirection: Axis.horizontal,
-                    shrinkWrap: true,
+            return SmartRefresher(
+              controller: refresher,
+              onRefresh: _onRefresh,
+              header: const WaterDropMaterialHeader(),
+              child: ListView(
+                children: [
+                  SizedBox(
+                    height: 148 * h,
+                    width: MediaQuery.of(context).size.width,
+                    child: ListView(
+                      scrollDirection: Axis.horizontal,
+                      shrinkWrap: true,
+                    ),
                   ),
-                ),
-                ListView.builder(
-                  shrinkWrap: true,
-                  physics: const NeverScrollableScrollPhysics(),
-                  itemCount: data.length,
-                  itemBuilder: (context, index) {
-                    return LentaWidget(
-                      data: data[index],
-                      onTap: () {
-                        if (data[index].userPhone == myPhoneNumber) {
-                          widget.change(4);
-                        } else {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                              builder: (context) => UserScreen(
-                                userPhoneNumber: data[index].userPhone,
-                                myPhoneNumber: myPhoneNumber,
+                  ListView.builder(
+                    shrinkWrap: true,
+                    physics: const NeverScrollableScrollPhysics(),
+                    itemCount: data.length,
+                    itemBuilder: (context, index) {
+                      return LentaWidget(
+                        data: data[index],
+                        onTap: () {
+                          if (data[index].userPhone == widget.phone) {
+                            widget.change(4);
+                          } else {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => UserScreen(
+                                  userPhoneNumber: data[index].userPhone,
+                                  myPhoneNumber: widget.phone,
+                                ),
                               ),
-                            ),
-                          );
-                        }
-                      },
-                    );
-                  },
-                ),
-              ],
+                            );
+                          }
+                        },
+                      );
+                    },
+                  ),
+                ],
+              ),
             );
           } else {
             return CustomShimmer(
@@ -121,5 +122,11 @@ class _HomeScreenState extends State<HomeScreen> {
         },
       ),
     );
+  }
+
+  _onRefresh() async {
+    lentaBloc.allLenta(widget.phone);
+    await Future.delayed(const Duration(milliseconds: 1000));
+    refresher.refreshCompleted();
   }
 }
