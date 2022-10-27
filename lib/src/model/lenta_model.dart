@@ -1,3 +1,5 @@
+import 'package:zet_fire/src/model/comment_model.dart';
+
 class LentaModel {
   String url;
   String id;
@@ -6,9 +8,12 @@ class LentaModel {
   int time;
   int commentCount;
   int likeCount;
+  String likeId;
+  List<CommentModel> commentData = [];
 
   LentaModel({
     this.id = '',
+    this.likeId = '',
     required this.caption,
     required this.url,
     required this.userPhone,
@@ -21,8 +26,6 @@ class LentaModel {
         url: json['url'],
         userPhone: json['phone'],
         time: json['time'],
-        commentCount: json['comment_count'],
-        likeCount: json['like_count'],
         caption: json['caption'],
       );
 
@@ -30,8 +33,6 @@ class LentaModel {
         'url': url,
         'phone': userPhone,
         'time': time,
-        'comment_count': commentCount,
-        'like_count': likeCount,
         'caption': caption,
       };
 }

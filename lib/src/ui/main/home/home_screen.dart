@@ -5,6 +5,7 @@ import 'package:zet_fire/src/bloc/lenta_bloc.dart';
 import 'package:zet_fire/src/colors/app_color.dart';
 import 'package:zet_fire/src/model/lenta_model.dart';
 import 'package:zet_fire/src/ui/main/profile/user_screen.dart';
+import 'package:zet_fire/src/ui/main/single_lenta/single_lenta_screen.dart';
 import 'package:zet_fire/src/utils/utils.dart';
 import 'package:zet_fire/src/widget/app/shimmer.dart';
 import 'package:zet_fire/src/widget/lenta/lenta_widget.dart';
@@ -33,7 +34,6 @@ class _HomeScreenState extends State<HomeScreen> {
   void dispose() {
     super.dispose();
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -103,6 +103,9 @@ class _HomeScreenState extends State<HomeScreen> {
                               ),
                             );
                           }
+                        },
+                        onPhotoTap: () {
+                          Navigator.push(context, MaterialPageRoute(builder: (context)=>SingleLentaScreen(data: data[index],),),);
                         },
                       );
                     },

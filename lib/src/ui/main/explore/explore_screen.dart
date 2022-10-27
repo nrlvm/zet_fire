@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:zet_fire/src/bloc/explore_bloc.dart';
 import 'package:zet_fire/src/model/lenta_model.dart';
-import 'package:zet_fire/src/ui/main/signle_lenta/single_lenta_screen.dart';
+import 'package:zet_fire/src/ui/main/single_lenta/single_lenta_screen.dart';
 import 'package:zet_fire/src/utils/utils.dart';
 import 'package:zet_fire/src/widget/app/custom_network_image.dart';
 

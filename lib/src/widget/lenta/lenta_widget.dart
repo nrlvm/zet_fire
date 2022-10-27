@@ -11,11 +11,13 @@ import 'package:zet_fire/src/widget/app/custom_network_image.dart';
 class LentaWidget extends StatefulWidget {
   final LentaModel data;
   final Function() onTap;
+  final Function() onPhotoTap;
 
   const LentaWidget({
     Key? key,
     required this.data,
     required this.onTap,
+    required this.onPhotoTap,
   }) : super(key: key);
 
   @override
@@ -145,9 +147,12 @@ class _LentaWidgetState extends State<LentaWidget> {
           SizedBox(
             height: 20 * h,
           ),
-          CustomNetworkImage(
-            image: widget.data.url,
-            borderRadius: BorderRadius.circular(10),
+          GestureDetector(
+            onTap: widget.onPhotoTap,
+            child: CustomNetworkImage(
+              image: widget.data.url,
+              borderRadius: BorderRadius.circular(10),
+            ),
           ),
           SizedBox(
             height: 20 * h,
@@ -186,7 +191,7 @@ class _LentaWidgetState extends State<LentaWidget> {
                 width: 8 * h,
               ),
               Text(
-                widget.data.commentCount.toString(),
+                widget.data.commentData.length.toString(),
                 style: TextStyle(
                   fontFamily: AppColor.fontFamily,
                   fontWeight: FontWeight.w600,
