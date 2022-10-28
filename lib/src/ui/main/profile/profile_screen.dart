@@ -12,6 +12,7 @@ import 'package:zet_fire/src/model/profile_model.dart';
 import 'package:zet_fire/src/storage/storage_firebase.dart';
 import 'package:zet_fire/src/ui/follow/followers_screen.dart';
 import 'package:zet_fire/src/ui/main/profile/settings_screen.dart';
+import 'package:zet_fire/src/ui/main/single_lenta/single_lenta_screen.dart';
 import 'package:zet_fire/src/utils/utils.dart';
 import 'package:zet_fire/src/widget/app/custom_network_image.dart';
 import 'package:zet_fire/src/widget/profile/profile_widget.dart';
@@ -219,7 +220,20 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                                               borderRadius:
                                                   BorderRadius.circular(10),
                                               image: profile
-                                                  .lenta[index * _gridCount].url,
+                                                  .lenta[index * _gridCount]
+                                                  .url,
+                                              onTap: () {
+                                                Navigator.push(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        SingleLentaScreen(
+                                                      data: profile.lenta[
+                                                          index * _gridCount],
+                                                    ),
+                                                  ),
+                                                );
+                                              },
                                             ),
                                     ),
                                     SizedBox(
@@ -237,6 +251,19 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
                                               image: profile
                                                   .lenta[index * _gridCount + 1]
                                                   .url,
+                                              onTap: () {
+                                                Navigator.push(
+                                                  context,
+                                                  MaterialPageRoute(
+                                                    builder: (context) =>
+                                                        SingleLentaScreen(
+                                                      data: profile.lenta[
+                                                          index * _gridCount +
+                                                              1],
+                                                    ),
+                                                  ),
+                                                );
+                                              },
                                             ),
                                     ),
                                   ],

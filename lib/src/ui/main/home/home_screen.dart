@@ -2,8 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:zet_fire/src/bloc/lenta_bloc.dart';
+import 'package:zet_fire/src/bloc/like_bloc.dart';
+import 'package:zet_fire/src/cloud_firestore/like_cloud_fire.dart';
 import 'package:zet_fire/src/colors/app_color.dart';
 import 'package:zet_fire/src/model/lenta_model.dart';
+import 'package:zet_fire/src/model/like_model.dart';
 import 'package:zet_fire/src/ui/main/profile/user_screen.dart';
 import 'package:zet_fire/src/ui/main/single_lenta/single_lenta_screen.dart';
 import 'package:zet_fire/src/utils/utils.dart';
@@ -28,11 +31,6 @@ class _HomeScreenState extends State<HomeScreen> {
   void initState() {
     lentaBloc.allLenta(widget.phone);
     super.initState();
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
   }
 
   @override
@@ -88,8 +86,9 @@ class _HomeScreenState extends State<HomeScreen> {
                     itemCount: data.length,
                     itemBuilder: (context, index) {
                       return LentaWidget(
+                        key: Key(data[index].id),
                         data: data[index],
-                        onTap: () {
+                        openUserProfile: () {
                           if (data[index].userPhone == widget.phone) {
                             widget.change(4);
                           } else {
@@ -104,8 +103,35 @@ class _HomeScreenState extends State<HomeScreen> {
                             );
                           }
                         },
-                        onPhotoTap: () {
-                          Navigator.push(context, MaterialPageRoute(builder: (context)=>SingleLentaScreen(data: data[index],),),);
+                        openInfo: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => SingleLentaScreen(
+                                data: data[index],
+                              ),
+                            ),
+                          );
+                        },
+                        likeButton: () async {
+                          if (data[index].likeId.isEmpty) {
+                            print('liked');
+                            String id = await likeCloudFire.saveLike(
+                              LikeModel(
+                                postId: data[index].id,
+                                userPhone: widget.phone,
+                                time: DateTime.now().millisecondsSinceEpoch
+                              ),
+                            );
+                            data[index].likeId = id;
+                            data[index].likeCount++;
+                          } else {
+                            print('dis');
+                            likeCloudFire.deleteLike(data[index].likeId);
+                            data[index].likeId = '';
+                            data[index].likeCount--;
+                          }
+                          setState(() {});
                         },
                       );
                     },

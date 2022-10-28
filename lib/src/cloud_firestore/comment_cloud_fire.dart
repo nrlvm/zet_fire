@@ -9,8 +9,9 @@ class CommentCloudFire {
     var data = await cr.get();
     List<CommentModel> comments = [];
     for (int i = 0; i < data.docs.length; i++) {
-      CommentModel model =
-          CommentModel.fromJson(data.docs[i].data() as Map<String, dynamic>);
+      CommentModel model = CommentModel.fromJson(
+        data.docs[i].data() as Map<String, dynamic>,
+      );
       model.id = data.docs[i].id;
       comments.add(model);
     }
@@ -21,12 +22,17 @@ class CommentCloudFire {
     var data = await cr.where('post_id', isEqualTo: id).get();
     List<CommentModel> comments = [];
     for (int i = 0; i < data.docs.length; i++) {
-      CommentModel model =
-          CommentModel.fromJson(data.docs[i].data() as Map<String, dynamic>);
+      CommentModel model = CommentModel.fromJson(
+        data.docs[i].data() as Map<String, dynamic>,
+      );
       model.id = data.docs[i].id;
       comments.add(model);
     }
     return comments;
+  }
+
+  Future<void> saveComment(CommentModel data) async {
+    await cr.add(data.toJson());
   }
 }
 

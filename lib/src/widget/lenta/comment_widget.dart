@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:intl/intl.dart';
 import 'package:zet_fire/src/bloc/user_bloc.dart';
 import 'package:zet_fire/src/colors/app_color.dart';
 import 'package:zet_fire/src/model/comment_model.dart';
@@ -18,6 +20,7 @@ class CommentWidget extends StatefulWidget {
 class _CommentWidgetState extends State<CommentWidget> {
   UserModel user = UserModel.fromJson({});
 
+
   @override
   void initState() {
     _getData();
@@ -26,24 +29,41 @@ class _CommentWidgetState extends State<CommentWidget> {
 
   @override
   Widget build(BuildContext context) {
+    DateTime time = DateTime.fromMillisecondsSinceEpoch(widget.model.time);
+    String date = DateFormat('dd-MMM-yyy').format(time);
     double h = Utils.height(context);
     double w = Utils.width(context);
     return Container(
       width: MediaQuery.of(context).size.width,
       margin: EdgeInsets.symmetric(horizontal: 24 * w, vertical: 12 * h),
+      padding: EdgeInsets.symmetric(horizontal: 12 * w, vertical: 12 * h),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(12),
         border: Border.all(color: AppColor.grey, width: 0.5),
       ),
       child: Row(
         children: [
-          CustomNetworkImage(
-            image: user.userPhoto,
-            height: 38 * h,
-            width: 38 * h,
-            boxFit: BoxFit.contain,
-            borderRadius: BorderRadius.circular(38),
-          ),
+          user.userPhoto == ''
+              ? Container(
+                  height: 38 * h,
+                  width: 38 * h,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(38),
+                    border: Border.all(color: AppColor.grey.withOpacity(0.6)),
+                  ),
+                  child: SvgPicture.asset(
+                    'assets/icons/user.svg',
+                    fit: BoxFit.scaleDown,
+                    color: AppColor.dark.withOpacity(0.4),
+                  ),
+                )
+              : CustomNetworkImage(
+                  image: user.userPhoto,
+                  height: 38 * h,
+                  width: 38 * h,
+                  boxFit: BoxFit.cover,
+                  borderRadius: BorderRadius.circular(38),
+                ),
           SizedBox(
             width: 14 * w,
           ),
@@ -56,13 +76,19 @@ class _CommentWidgetState extends State<CommentWidget> {
                 ),
                 children: [
                   TextSpan(
-                    text: user.userName,
+                    text: '${user.userName} ',
                     style: const TextStyle(
                       fontWeight: FontWeight.w700,
                     ),
                   ),
                   TextSpan(
                     text: widget.model.comment,
+                    style: const TextStyle(
+                      fontWeight: FontWeight.w400,
+                    ),
+                  ),
+                  TextSpan(
+                    text: '\n$date',
                     style: const TextStyle(
                       fontWeight: FontWeight.w400,
                     ),

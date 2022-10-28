@@ -23,10 +23,10 @@ class LentaModel {
   });
 
   factory LentaModel.fromJson(Map<dynamic, dynamic> json) => LentaModel(
-        url: json['url'],
-        userPhone: json['phone'],
-        time: json['time'],
-        caption: json['caption'],
+        url: json['url'] ?? "",
+        userPhone: json['phone'] ?? "",
+        time: json['time'] ?? 0,
+        caption: json['caption'] ?? "",
       );
 
   Map<String, dynamic> toJson() => {
