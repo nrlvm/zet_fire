@@ -21,24 +21,27 @@ class LentaBloc {
     List<CommentModel> comments = await commentCloudFire.getComments();
     List<LikeModel> allLikes = await likeCloudFire.getLikes();
     List<LentaModel> lateLenta = [];
+    for (int i = 0; i < lenta.length; i++) {
+      for (int k = 0; k < comments.length; k++) {
+        if (lenta[i].id == comments[k].postId) {
+          lenta[i].commentData.add(comments[k]);
+        }
+      }
+      for (int l = 0; l < allLikes.length; l++) {
+        if (lenta[i].id == allLikes[l].postId) {
+          lenta[i].likeCount++;
+          if (allLikes[l].userPhone == phone) {
+            lenta[i].likeId = allLikes[l].id;
+          }
+        }
+      }
+    }
+
     if (followed.isEmpty) {
       data = lenta;
       _fetchLenta.sink.add(data);
     } else {
-      for (int i = 0; i < lenta.length; i++) {
-        for (int k = 0; k < comments.length; k++) {
-          if (lenta[i].id == comments[k].postId) {
-            lenta[i].commentData.add(comments[k]);
-          }
-        }
-        for (int l = 0; l < allLikes.length; l++) {
-          if (lenta[i].id == allLikes[l].postId) {
-            lenta[i].likeCount++;
-            if (allLikes[l].userPhone == phone) {
-              lenta[i].likeId = allLikes[l].id;
-            }
-          }
-        }
+      for (int i = 0; i < lenta.length;i++) {
         for (int j = 0; j < followed.length; j++) {
           if (lenta[i].userPhone == followed[j].user2) {
             lateLenta.add(lenta[i]);

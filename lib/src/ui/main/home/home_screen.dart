@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:zet_fire/src/bloc/lenta_bloc.dart';
-import 'package:zet_fire/src/bloc/like_bloc.dart';
 import 'package:zet_fire/src/cloud_firestore/like_cloud_fire.dart';
 import 'package:zet_fire/src/colors/app_color.dart';
 import 'package:zet_fire/src/model/lenta_model.dart';
@@ -114,19 +113,18 @@ class _HomeScreenState extends State<HomeScreen> {
                           );
                         },
                         likeButton: () async {
-                          if (data[index].likeId.isEmpty) {
-                            print('liked');
+                          if (data[index].likeId.isEmpty &&
+                              widget.phone.isNotEmpty) {
                             String id = await likeCloudFire.saveLike(
                               LikeModel(
                                 postId: data[index].id,
                                 userPhone: widget.phone,
-                                time: DateTime.now().millisecondsSinceEpoch
+                                time: DateTime.now().millisecondsSinceEpoch,
                               ),
                             );
                             data[index].likeId = id;
                             data[index].likeCount++;
                           } else {
-                            print('dis');
                             likeCloudFire.deleteLike(data[index].likeId);
                             data[index].likeId = '';
                             data[index].likeCount--;
