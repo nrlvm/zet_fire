@@ -96,7 +96,6 @@ class _SingleLentaScreenState extends State<SingleLentaScreen> {
                         lentaList: false,
                         likeButton: () async {
                           if (data.likeId.isEmpty) {
-                            print('liked');
                             String id = await likeCloudFire.saveLike(
                               LikeModel(
                                 postId: data.id,
@@ -107,7 +106,7 @@ class _SingleLentaScreenState extends State<SingleLentaScreen> {
                             data.likeId = id;
                             data.likeCount++;
                           } else {
-                            print('dis');
+
                             likeCloudFire.deleteLike(data.likeId);
                             data.likeId = '';
                             data.likeCount--;

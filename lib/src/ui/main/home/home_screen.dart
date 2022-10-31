@@ -113,8 +113,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           );
                         },
                         likeButton: () async {
-                          if (data[index].likeId.isEmpty &&
-                              widget.phone.isNotEmpty) {
+                          if (data[index].likeId.isEmpty) {
                             String id = await likeCloudFire.saveLike(
                               LikeModel(
                                 postId: data[index].id,

@@ -2,6 +2,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:zet_fire/src/colors/app_color.dart';
 import 'package:zet_fire/src/ui/auth/main_auth_screen.dart';
 import 'package:zet_fire/src/ui/main/main_screen.dart';
 
@@ -34,6 +35,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         primarySwatch: Colors.blue,
+        fontFamily: AppColor.fontFamily,
       ),
       home: id.isEmpty ? const MainAuthScreen() : const MainScreen(),
     );

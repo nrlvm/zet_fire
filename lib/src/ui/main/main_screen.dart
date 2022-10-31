@@ -51,6 +51,7 @@ class _MainScreenState extends State<MainScreen> {
         MyProfileScreen(
           phoneMe: myPhone,
         ),
+
       ][_selectedIndex],
       bottomNavigationBar: SizedBox(
         height: 96 * h,

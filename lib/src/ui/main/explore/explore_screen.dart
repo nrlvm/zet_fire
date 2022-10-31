@@ -5,8 +5,7 @@ import 'package:zet_fire/src/model/lenta_model.dart';
 import 'package:zet_fire/src/ui/main/single_lenta/single_lenta_screen.dart';
 import 'package:zet_fire/src/utils/utils.dart';
 import 'package:zet_fire/src/widget/app/custom_network_image.dart';
-
-import '../../../colors/app_color.dart';
+import 'package:zet_fire/src/colors/app_color.dart';
 
 class ExploreScreen extends StatefulWidget {
   const ExploreScreen({Key? key}) : super(key: key);
@@ -48,8 +47,11 @@ class _ExploreScreenState extends State<ExploreScreen> {
           if (snapshot.hasData) {
             List<LentaModel> data = snapshot.data!;
             return MasonryGridView.count(
-              padding:
-                  EdgeInsets.only(left: 12 * w, right: 12 * w, top: 12 * h),
+              padding: EdgeInsets.only(
+                left: 12 * w,
+                right: 12 * w,
+                top: 12 * h,
+              ),
               itemCount: data.length,
               crossAxisCount: 2,
               mainAxisSpacing: 12,

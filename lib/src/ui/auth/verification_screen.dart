@@ -6,7 +6,6 @@ import 'package:pinput/pinput.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:zet_fire/src/colors/app_color.dart';
 import 'package:zet_fire/src/fire_auth/auth_user_repository.dart';
-import 'package:zet_fire/src/ui/main/home/home_screen.dart';
 import 'package:zet_fire/src/ui/main/main_screen.dart';
 import 'package:zet_fire/src/utils/utils.dart';
 

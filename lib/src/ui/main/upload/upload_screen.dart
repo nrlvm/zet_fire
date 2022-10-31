@@ -22,6 +22,7 @@ class UploadScreen extends StatefulWidget {
 class _UploadScreenState extends State<UploadScreen> {
   final captionController = TextEditingController();
   bool loading = false;
+  final focus = FocusNode();
 
   @override
   Widget build(BuildContext context) {
@@ -93,19 +94,12 @@ class _UploadScreenState extends State<UploadScreen> {
                     ),
             ),
           ),
-          Container(
-            height: 56 * h,
-            width: MediaQuery.of(context).size.width,
-            margin: EdgeInsets.symmetric(
-              horizontal: 16 * w,
-              vertical: 16 * h,
-            ),
+          Padding(
             padding: EdgeInsets.symmetric(horizontal: 16 * w),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(16),
-              border: Border.all(color: AppColor.dark.withOpacity(0.2)),
-            ),
             child: TextField(
+              textInputAction: TextInputAction.newline,
+              keyboardType: TextInputType.multiline,
+              maxLines: null,
               controller: captionController,
               style: TextStyle(
                 fontFamily: AppColor.fontFamily,
@@ -113,11 +107,30 @@ class _UploadScreenState extends State<UploadScreen> {
                 fontSize: 16 * h,
                 color: AppColor.dark,
               ),
-              decoration: const InputDecoration(
+              decoration: InputDecoration(
+                isDense: true,
                 border: InputBorder.none,
-                hintText: 'Write caption here',
+                prefixIconConstraints: const BoxConstraints(minWidth: 56),
+                label: const Text('Caption'),
+                prefixIcon: const Icon(
+                  Icons.textsms_outlined,
+                ),
+                focusedBorder: OutlineInputBorder(
+                  borderSide: BorderSide(color: AppColor.blue, width: 2),
+                  borderRadius: BorderRadius.circular(16),
+                ),
+                enabledBorder: OutlineInputBorder(
+                  borderSide: BorderSide(
+                    color: AppColor.dark.withOpacity(0.2),
+                    width: 2,
+                  ),
+                  borderRadius: BorderRadius.circular(16),
+                ),
               ),
             ),
+          ),
+          SizedBox(
+            height: 16 * h,
           ),
           GestureDetector(
             onTap: () async {
@@ -175,6 +188,9 @@ class _UploadScreenState extends State<UploadScreen> {
                       ),
               ),
             ),
+          ),
+          SizedBox(
+            height: 24 * h,
           ),
         ],
       ),
