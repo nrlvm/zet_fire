@@ -37,6 +37,7 @@ class _MainScreenState extends State<MainScreen> {
   Widget build(BuildContext context) {
     double h = Utils.height(context);
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       body: [
         HomeScreen(
           phone: myPhone,
@@ -51,8 +52,18 @@ class _MainScreenState extends State<MainScreen> {
         MyProfileScreen(
           phoneMe: myPhone,
         ),
-
       ][_selectedIndex],
+      floatingActionButton: FloatingActionButton(
+        onPressed: () async {
+          _selectedIndex = 2;
+          setState(() {});
+        },
+        child: Icon(
+          Icons.add,
+          size: 28 * h,
+        ),
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       bottomNavigationBar: SizedBox(
         height: 96 * h,
         width: MediaQuery.of(context).size.width,
@@ -68,7 +79,6 @@ class _MainScreenState extends State<MainScreen> {
           ),
           onTap: (index) {
             _selectedIndex = index;
-            // k = true;
             setState(() {});
           },
           currentIndex: _selectedIndex,
@@ -125,30 +135,8 @@ class _MainScreenState extends State<MainScreen> {
               ),
               label: '',
             ),
-            BottomNavigationBarItem(
-              icon: Column(
-                children: [
-                  SvgPicture.asset(
-                    'assets/bottom_icon/plus.svg',
-                    color: _selectedIndex == 2 ? AppColor.dark : AppColor.grey,
-                  ),
-                  SizedBox(
-                    height: 8 * h,
-                  ),
-                  _selectedIndex == 2
-                      ? Container(
-                          height: 6 * h,
-                          width: 6 * h,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(6),
-                            color: AppColor.blue,
-                          ),
-                        )
-                      : SizedBox(
-                          height: 6 * h,
-                        ),
-                ],
-              ),
+            const BottomNavigationBarItem(
+              icon: SizedBox(),
               label: '',
             ),
             BottomNavigationBarItem(

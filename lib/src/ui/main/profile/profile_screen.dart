@@ -100,6 +100,7 @@ class _MyProfileScreenState extends State<MyProfileScreen> {
               child: ListView(
                 children: [
                   ProfileWidget(
+                    myPhone: widget.phoneMe,
                     isFollowed: followed,
                     myProfile: true,
                     userModel: profile.user,

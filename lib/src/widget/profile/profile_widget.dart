@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:zet_fire/src/colors/app_color.dart';
 import 'package:zet_fire/src/model/user_model.dart';
+import 'package:zet_fire/src/ui/chat/chat_screen.dart';
 import 'package:zet_fire/src/utils/utils.dart';
 import 'package:zet_fire/src/widget/app/custom_network_image.dart';
 
@@ -15,6 +16,7 @@ class ProfileWidget extends StatelessWidget {
   final Function() follow;
   final Function() onTapFollowing;
   final Function() onTapFollowers;
+  final String myPhone;
 
   const ProfileWidget({
     Key? key,
@@ -26,7 +28,7 @@ class ProfileWidget extends StatelessWidget {
     required this.isFollowed,
     required this.follow,
     required this.onTapFollowing,
-    required this.onTapFollowers,
+    required this.onTapFollowers, required this.myPhone,
   }) : super(key: key);
 
   @override
@@ -178,22 +180,34 @@ class ProfileWidget extends StatelessWidget {
                   margin: EdgeInsets.only(bottom: 25 * h),
                   child: Row(
                     children: [
-                      Container(
-                        height: 56 * h,
-                        width: 92 * w,
-                        decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(28.5),
-                          border: Border.all(
-                            color: AppColor.blue,
-                            width: 2,
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => ChatScreen(
+                                userPhone: userModel.phone,
+                              ),
+                            ),
+                          );
+                        },
+                        child: Container(
+                          height: 56 * h,
+                          width: 92 * w,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(28.5),
+                            border: Border.all(
+                              color: AppColor.blue,
+                              width: 2,
+                            ),
                           ),
-                        ),
-                        child: Center(
-                          child: SvgPicture.asset(
-                            'assets/icons/message.svg',
-                            height: 28 * h,
-                            width: 28 * h,
-                            fit: BoxFit.none,
+                          child: Center(
+                            child: SvgPicture.asset(
+                              'assets/icons/message.svg',
+                              height: 28 * h,
+                              width: 28 * h,
+                              fit: BoxFit.none,
+                            ),
                           ),
                         ),
                       ),

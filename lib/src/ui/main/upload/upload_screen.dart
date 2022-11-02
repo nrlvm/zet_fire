@@ -97,6 +97,7 @@ class _UploadScreenState extends State<UploadScreen> {
           Padding(
             padding: EdgeInsets.symmetric(horizontal: 16 * w),
             child: TextField(
+              focusNode: focus,
               textInputAction: TextInputAction.newline,
               keyboardType: TextInputType.multiline,
               maxLines: null,
@@ -115,8 +116,28 @@ class _UploadScreenState extends State<UploadScreen> {
                 prefixIcon: const Icon(
                   Icons.textsms_outlined,
                 ),
+                suffix: GestureDetector(
+                  onTap: (){
+                    focus.unfocus();
+                  },
+                  child: Text(
+                    'done',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                      fontWeight: FontWeight.w500,
+                      fontSize: 16 * h,
+                      color: AppColor.dark,
+                    ),
+                  ),
+                ),
+                // labelStyle: TextStyle(
+                //   color: AppColor.red,
+                // ),
+                floatingLabelStyle: TextStyle(
+                  color: AppColor.red
+                ),
                 focusedBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color: AppColor.blue, width: 2),
+                  borderSide: BorderSide(color: AppColor.red, width: 2),
                   borderRadius: BorderRadius.circular(16),
                 ),
                 enabledBorder: OutlineInputBorder(

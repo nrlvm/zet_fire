@@ -79,6 +79,7 @@ class _UserScreenState extends State<UserScreen> {
               child: ListView(
                 children: [
                   ProfileWidget(
+                    myPhone: widget.myPhoneNumber,
                     userModel: profileModel.user,
                     publicationCount: profileModel.lenta.length,
                     changePhoto: () {},
