@@ -13,10 +13,11 @@ import 'package:zet_fire/src/widget/chat/message_widget.dart';
 
 class ChatScreen extends StatefulWidget {
   final String userPhone;
+  final String chatId;
 
   const ChatScreen({
     Key? key,
-    required this.userPhone,
+    required this.userPhone, this.chatId ='',
   }) : super(key: key);
 
   @override
@@ -27,7 +28,7 @@ class _ChatScreenState extends State<ChatScreen> {
   final TextEditingController controller = TextEditingController();
   UserModel user = UserModel.fromJson({});
   bool controllerIsEmpty = true;
-  String chatId = '';
+  // String chatId = '';
 
   @override
   void initState() {
@@ -144,8 +145,9 @@ class _ChatScreenState extends State<ChatScreen> {
               builder: (context, snapshot) {
                 if (snapshot.hasData) {
                   List<MessageModel> msg = snapshot.data!;
-                  chatId = msg.first.chatId;
+                  // chatId = msg.first.chatId;
                   return ListView.builder(
+                    padding: EdgeInsets.only(top: 16 * h),
                     itemCount: msg.length,
                     itemBuilder: (context, index) {
                       return MessageWidget(
@@ -225,19 +227,21 @@ class _ChatScreenState extends State<ChatScreen> {
                 ),
                 GestureDetector(
                   onTap: () async {
-                    if (controller.text.isNotEmpty) {
-                      if (chatId != '') {
-                        messagesBloc.createMessage(
-                            controller.text, chatId, widget.userPhone);
-                        controller.text = '';
-                      } else {
-                        String id =
-                            await allChatsBloc.createChat(widget.userPhone);
-                        messagesBloc.createMessage(
-                            controller.text, id, widget.userPhone);
-                        controller.text = '';
-                      }
-                    }
+                    print(widget.chatId);
+                    // if (controller.text.isNotEmpty) {
+                    //   if (widget.chatId != '') {
+                    //     messagesBloc.createMessage(
+                    //         controller.text, widget.chatId, widget.userPhone);
+                    //     controller.text = '';
+                    //   } else {
+                    //     String id =
+                    //         await allChatsBloc.createChat(widget.userPhone);
+                    //     messagesBloc.createMessage(
+                    //         controller.text, id, widget.userPhone);
+                    //     controller.text = '';
+                    //   }
+                    //   setState(() {});
+                    // }
                   },
                   child: Container(
                     color: Colors.transparent,

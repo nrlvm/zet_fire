@@ -52,7 +52,6 @@ class _MainAuthScreenState extends State<MainAuthScreen> {
           ),
           Container(
             height: 73 * h,
-            width: 233 * w,
             padding: EdgeInsets.symmetric(horizontal: 28 * h),
             child: k == true
                 ? Row(
@@ -139,7 +138,9 @@ class _MainAuthScreenState extends State<MainAuthScreen> {
                           ),
                         ),
                       ),
-                      const Spacer(),
+                      SizedBox(
+                        width: 46 * w,
+                      ),
                       Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         crossAxisAlignment: CrossAxisAlignment.center,

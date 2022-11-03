@@ -38,6 +38,7 @@ class _MainScreenState extends State<MainScreen> {
     double h = Utils.height(context);
     return Scaffold(
       resizeToAvoidBottomInset: false,
+      extendBody: true,
       body: [
         HomeScreen(
           phone: myPhone,
@@ -48,7 +49,9 @@ class _MainScreenState extends State<MainScreen> {
         ),
         const ExploreScreen(),
         const UploadScreen(),
-        const AllChatsScreen(),
+        AllChatsScreen(
+          myPhone: myPhone,
+        ),
         MyProfileScreen(
           phoneMe: myPhone,
         ),
@@ -67,131 +70,170 @@ class _MainScreenState extends State<MainScreen> {
       bottomNavigationBar: SizedBox(
         height: 96 * h,
         width: MediaQuery.of(context).size.width,
-        child: BottomNavigationBar(
-          type: BottomNavigationBarType.fixed,
-          selectedLabelStyle: TextStyle(
-            fontSize: 0 * h,
-            color: Colors.transparent,
+        child: BottomAppBar(
+          shape: const CircularNotchedRectangle(),
+          notchMargin: 8 * h,
+          child: Row(
+            children: [
+              Expanded(
+                child: GestureDetector(
+                  onTap: () {
+                    _selectedIndex = 0;
+                    setState(() {});
+                  },
+                  child: Container(
+                    color: Colors.transparent,
+                    child: Column(
+                      children: [
+                        SizedBox(
+                          height: 20 * h,
+                        ),
+                        SvgPicture.asset(
+                          'assets/bottom_icon/home.svg',
+                          color: _selectedIndex == 0
+                              ? AppColor.dark
+                              : AppColor.grey,
+                        ),
+                        SizedBox(
+                          height: 8 * h,
+                        ),
+                        _selectedIndex == 0
+                            ? Container(
+                                height: 6 * h,
+                                width: 6 * h,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(6),
+                                  color: AppColor.blue,
+                                ),
+                              )
+                            : SizedBox(
+                                height: 6 * h,
+                              ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+              Expanded(
+                child: GestureDetector(
+                  onTap: () {
+                    _selectedIndex = 1;
+                    setState(() {});
+                  },
+                  child: Container(
+                    color: Colors.transparent,
+                    child: Column(
+                      children: [
+                        SizedBox(
+                          height: 20 * h,
+                        ),
+                        SvgPicture.asset(
+                          'assets/bottom_icon/send.svg',
+                          color: _selectedIndex == 1
+                              ? AppColor.dark
+                              : AppColor.grey,
+                        ),
+                        SizedBox(
+                          height: 8 * h,
+                        ),
+                        _selectedIndex == 1
+                            ? Container(
+                                height: 6 * h,
+                                width: 6 * h,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(6),
+                                  color: AppColor.blue,
+                                ),
+                              )
+                            : SizedBox(
+                                height: 6 * h,
+                              ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+              const Spacer(),
+              Expanded(
+                child: GestureDetector(
+                  onTap: () {
+                    _selectedIndex = 3;
+                    setState(() {});
+                  },
+                  child: Container(
+                    color: Colors.transparent,
+                    child: Column(
+                      children: [
+                        SizedBox(
+                          height: 20 * h,
+                        ),
+                        SvgPicture.asset(
+                          'assets/bottom_icon/chat.svg',
+                          color: _selectedIndex == 3
+                              ? AppColor.dark
+                              : AppColor.grey,
+                        ),
+                        SizedBox(
+                          height: 8 * h,
+                        ),
+                        _selectedIndex == 3
+                            ? Container(
+                                height: 6 * h,
+                                width: 6 * h,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(6),
+                                  color: AppColor.blue,
+                                ),
+                              )
+                            : SizedBox(
+                                height: 6 * h,
+                              ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+              Expanded(
+                child: GestureDetector(
+                  onTap: () {
+                    _selectedIndex = 4;
+                    setState(() {});
+                  },
+                  child: Container(
+                    color: Colors.transparent,
+                    child: Column(
+                      children: [
+                        SizedBox(
+                          height: 20 * h,
+                        ),
+                        SvgPicture.asset(
+                          'assets/bottom_icon/user.svg',
+                          color: _selectedIndex == 4
+                              ? AppColor.dark
+                              : AppColor.grey,
+                        ),
+                        SizedBox(
+                          height: 8 * h,
+                        ),
+                        _selectedIndex == 4
+                            ? Container(
+                                height: 6 * h,
+                                width: 6 * h,
+                                decoration: BoxDecoration(
+                                  borderRadius: BorderRadius.circular(6),
+                                  color: AppColor.blue,
+                                ),
+                              )
+                            : SizedBox(
+                                height: 6 * h,
+                              ),
+                      ],
+                    ),
+                  ),
+                ),
+              ),
+            ],
           ),
-          unselectedLabelStyle: TextStyle(
-            fontSize: 0 * h,
-            color: Colors.transparent,
-          ),
-          onTap: (index) {
-            _selectedIndex = index;
-            setState(() {});
-          },
-          currentIndex: _selectedIndex,
-          items: [
-            BottomNavigationBarItem(
-              icon: Column(
-                children: [
-                  SvgPicture.asset(
-                    'assets/bottom_icon/home.svg',
-                    color: _selectedIndex == 0 ? AppColor.dark : AppColor.grey,
-                  ),
-                  SizedBox(
-                    height: 8 * h,
-                  ),
-                  _selectedIndex == 0
-                      ? Container(
-                          height: 6 * h,
-                          width: 6 * h,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(6),
-                            color: AppColor.blue,
-                          ),
-                        )
-                      : SizedBox(
-                          height: 6 * h,
-                        ),
-                ],
-              ),
-              label: '',
-            ),
-            BottomNavigationBarItem(
-              icon: Column(
-                children: [
-                  SvgPicture.asset(
-                    'assets/bottom_icon/send.svg',
-                    color: _selectedIndex == 1 ? AppColor.dark : AppColor.grey,
-                  ),
-                  SizedBox(
-                    height: 8 * h,
-                  ),
-                  _selectedIndex == 1
-                      ? Container(
-                          height: 6 * h,
-                          width: 6 * h,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(6),
-                            color: AppColor.blue,
-                          ),
-                        )
-                      : SizedBox(
-                          height: 6 * h,
-                        ),
-                ],
-              ),
-              label: '',
-            ),
-            const BottomNavigationBarItem(
-              icon: SizedBox(),
-              label: '',
-            ),
-            BottomNavigationBarItem(
-              icon: Column(
-                children: [
-                  SvgPicture.asset(
-                    'assets/bottom_icon/chat.svg',
-                    color: _selectedIndex == 3 ? AppColor.dark : AppColor.grey,
-                  ),
-                  SizedBox(
-                    height: 8 * h,
-                  ),
-                  _selectedIndex == 3
-                      ? Container(
-                          height: 6 * h,
-                          width: 6 * h,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(6),
-                            color: AppColor.blue,
-                          ),
-                        )
-                      : SizedBox(
-                          height: 6 * h,
-                        ),
-                ],
-              ),
-              label: '',
-            ),
-            BottomNavigationBarItem(
-              icon: Column(
-                children: [
-                  SvgPicture.asset(
-                    'assets/bottom_icon/home.svg',
-                    color: _selectedIndex == 4 ? AppColor.dark : AppColor.grey,
-                  ),
-                  SizedBox(
-                    height: 8 * h,
-                  ),
-                  _selectedIndex == 4
-                      ? Container(
-                          height: 6 * h,
-                          width: 6 * h,
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(6),
-                            color: AppColor.blue,
-                          ),
-                        )
-                      : SizedBox(
-                          height: 6 * h,
-                        ),
-                ],
-              ),
-              label: '',
-            ),
-          ],
         ),
       ),
     );

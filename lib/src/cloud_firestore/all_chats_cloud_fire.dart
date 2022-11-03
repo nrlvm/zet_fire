@@ -1,5 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:zet_fire/src/model/chat_model.dart';
 
 class AllChatsCloudFire {
