@@ -14,6 +14,7 @@ class MessagesCloudFire {
       messageModel.id = data.docs[i].id;
       messages.add(messageModel);
     }
+    messages.sort((a,b)=> b.time.compareTo(a.time));
     return messages;
   }
 

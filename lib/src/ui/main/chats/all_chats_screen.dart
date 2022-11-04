@@ -124,6 +124,7 @@ class _AllChatsScreenState extends State<AllChatsScreen> {
                             context,
                             MaterialPageRoute(
                               builder: (context) => ChatScreen(
+                                myPhone: widget.myPhone,
                                 chatId: chats[index].id,
                                 userPhone: chats[index].user1 == widget.myPhone
                                     ? chats[index].user2
@@ -133,6 +134,7 @@ class _AllChatsScreenState extends State<AllChatsScreen> {
                           );
                         },
                         child: ChatWidget(
+                          myPhone: widget.myPhone,
                           userPhone: chats[index].user1 == widget.myPhone
                               ? chats[index].user2
                               : chats[index].user1,
@@ -147,10 +149,12 @@ class _AllChatsScreenState extends State<AllChatsScreen> {
               },
             );
           } else {
-            return Container(
-              height: 120 * h,
-              width: MediaQuery.of(context).size.width,
-              color: AppColor.red,
+            return Center(
+              child: SizedBox(
+                height: 36 * h,
+                width: 36 * h,
+                child: const CircularProgressIndicator(),
+              ),
             );
           }
         },

@@ -22,4 +22,8 @@ class AllChatsCloudFire {
     var info = await cr.add(data.toJson());
     return info.id;
   }
+
+  updateChatInfo(ChatModel chat) async {
+    await cr.doc(chat.id).update(chat.toJson());
+  }
 }

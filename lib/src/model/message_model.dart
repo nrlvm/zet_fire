@@ -1,3 +1,13 @@
+class MessageInfoModel {
+  List<MessageModel> data;
+  String chatId;
+
+  MessageInfoModel({
+    required this.data,
+    required this.chatId,
+  });
+}
+
 class MessageModel {
   String userId;
   String text;

@@ -18,15 +18,18 @@ class AllChatsBloc {
 
   Future<ChatModel> chatExists(String user1, String myPhone) async {
     List<ChatModel> chats = await allChatsCloudFire.getChats('user_1', user1);
-    chats.addAll(await allChatsCloudFire.getChats('user_2', user1));
-    ChatModel singleChat = ChatModel.fromJson({});
     for (int i = 0; i < chats.length; i++) {
       if (chats[i].user2 == myPhone) {
-        singleChat = chats[i];
-        break;
+        return chats[i];
       }
     }
-    return singleChat;
+    List<ChatModel> info = await allChatsCloudFire.getChats('user_2', user1);
+    for (int i = 0; i < info.length; i++) {
+      if (info[i].user1 == myPhone) {
+        return info[i];
+      }
+    }
+    return ChatModel.fromJson({});
   }
 
   Future<String> createChat(String userPhone) async {
@@ -36,9 +39,14 @@ class AllChatsBloc {
       ChatModel chatModel = ChatModel(user1: myPhone, user2: userPhone);
       String info = await allChatsCloudFire.createChat(chatModel);
       return info;
-    }else{
+    } else {
       return '';
     }
+  }
+
+  updateChat(String message, ChatModel chat) async {
+    chat.lastMessage = message;
+    await allChatsCloudFire.updateChatInfo(chat);
   }
 }
 

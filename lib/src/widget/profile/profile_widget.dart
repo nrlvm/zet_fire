@@ -187,6 +187,7 @@ class ProfileWidget extends StatelessWidget {
                             MaterialPageRoute(
                               builder: (context) => ChatScreen(
                                 userPhone: userModel.phone,
+                                myPhone: myPhone,
                               ),
                             ),
                           );

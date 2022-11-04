@@ -70,12 +70,12 @@ class MessageWidget extends StatelessWidget {
                   ),
                   decoration: BoxDecoration(
                     borderRadius: const BorderRadius.only(
-                      topLeft: Radius.circular(24),
-                      topRight: Radius.circular(0),
+                      topLeft: Radius.circular(0),
+                      topRight: Radius.circular(24),
                       bottomLeft: Radius.circular(24),
                       bottomRight: Radius.circular(24),
                     ),
-                    color: AppColor.blue,
+                    color: AppColor.white,
                   ),
                   child: Text(
                     text,

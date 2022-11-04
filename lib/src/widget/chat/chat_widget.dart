@@ -1,15 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:zet_fire/src/bloc/all_chats_bloc.dart';
 import 'package:zet_fire/src/bloc/user_bloc.dart';
 import 'package:zet_fire/src/colors/app_color.dart';
+import 'package:zet_fire/src/model/chat_model.dart';
 import 'package:zet_fire/src/model/user_model.dart';
 import 'package:zet_fire/src/utils/utils.dart';
 import 'package:zet_fire/src/widget/app/custom_network_image.dart';
 
 class ChatWidget extends StatefulWidget {
   final String userPhone;
+  final String myPhone;
 
-  const ChatWidget({Key? key, required this.userPhone}) : super(key: key);
+  const ChatWidget({Key? key, required this.userPhone, required this.myPhone})
+      : super(key: key);
 
   @override
   State<ChatWidget> createState() => _ChatWidgetState();
@@ -17,6 +21,7 @@ class ChatWidget extends StatefulWidget {
 
 class _ChatWidgetState extends State<ChatWidget> {
   UserModel userModel = UserModel.fromJson({});
+  ChatModel chatModel = ChatModel.fromJson({});
 
   @override
   void initState() {
@@ -76,7 +81,7 @@ class _ChatWidgetState extends State<ChatWidget> {
                 ),
                 const Spacer(),
                 Text(
-                  'I’m at the office right now.',
+                  chatModel.lastMessage,
                   style: TextStyle(
                     fontFamily: AppColor.fontFamily,
                     fontWeight: FontWeight.w600,
@@ -116,6 +121,7 @@ class _ChatWidgetState extends State<ChatWidget> {
 
   Future<void> _getData() async {
     userModel = await userBloc.getUserInfo(widget.userPhone);
+    chatModel = await allChatsBloc.chatExists(widget.userPhone, widget.myPhone);
     if (mounted) {
       setState(() {});
     }
