@@ -30,6 +30,12 @@ class MessagesBloc {
           messages[i].fromMe = true;
         }
       }
+      if (model.user1 == myPhone) {
+        model.userCount1 = 0;
+      } else {
+        model.userCount2 = 0;
+      }
+      allChatsBloc.allChatsCloudFire.updateChatInfo(model);
       data = messages;
       _fetchMessages.sink.add(
         MessageInfoModel(
@@ -62,14 +68,20 @@ class MessagesBloc {
     );
     await mcf.createMessage(messageModel);
     data.insert(0, messageModel);
+    ChatModel chat = await allChatsBloc.chatExists(userPhone, myPhone);
+    chat.lastMessage = text;
+    if (chat.user1 == myPhone) {
+      chat.userCount2++;
+    } else {
+      chat.userCount1++;
+    }
+    allChatsBloc.allChatsCloudFire.updateChatInfo(chat);
     _fetchMessages.sink.add(
       MessageInfoModel(
         chatId: chatId,
         data: data,
       ),
     );
-    ChatModel chat = await allChatsBloc.chatExists(userPhone, myPhone);
-    allChatsBloc.updateChat(messageModel.text, chat);
   }
 }
 

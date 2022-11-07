@@ -13,14 +13,14 @@ import 'package:zet_fire/src/widget/chat/message_widget.dart';
 
 class ChatScreen extends StatefulWidget {
   final String userPhone;
-  final String chatId;
   final String myPhone;
+  final String chatId;
 
   const ChatScreen({
     Key? key,
     required this.userPhone,
-    this.chatId = '',
     required this.myPhone,
+    this.chatId = '',
   }) : super(key: key);
 
   @override
@@ -162,17 +162,13 @@ class _ChatScreenState extends State<ChatScreen> {
                     padding: EdgeInsets.only(top: 16 * h),
                     itemCount: msg.length,
                     itemBuilder: (context, index) {
-                      return Column(
-                        children: [
-                          MessageWidget(
-                            text: msg[index].text,
-                            fromMe: msg[index].fromMe,
-                            date: msg[index].time,
-                          ),
-                          SizedBox(
-                            height: 16 * h,
-                          ),
-                        ],
+                      return Padding(
+                        padding: EdgeInsets.only(bottom: 16*h),
+                        child: MessageWidget(
+                          text: msg[index].text,
+                          fromMe: msg[index].fromMe,
+                          date: msg[index].time,
+                        ),
                       );
                     },
                   ),

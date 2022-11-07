@@ -44,10 +44,6 @@ class AllChatsBloc {
     }
   }
 
-  updateChat(String message, ChatModel chat) async {
-    chat.lastMessage = message;
-    await allChatsCloudFire.updateChatInfo(chat);
-  }
 }
 
 final allChatsBloc = AllChatsBloc();

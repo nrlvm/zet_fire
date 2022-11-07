@@ -22,6 +22,7 @@ class ChatWidget extends StatefulWidget {
 class _ChatWidgetState extends State<ChatWidget> {
   UserModel userModel = UserModel.fromJson({});
   ChatModel chatModel = ChatModel.fromJson({});
+  String me = 'user_1';
 
   @override
   void initState() {
@@ -92,25 +93,30 @@ class _ChatWidgetState extends State<ChatWidget> {
               ],
             ),
           ),
-          Container(
-            height: 24 * h,
-            width: 24 * h,
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(24),
-              color: AppColor.blue,
-            ),
-            child: Center(
-              child: Text(
-                '2',
-                style: TextStyle(
-                  fontFamily: AppColor.fontFamily,
-                  fontWeight: FontWeight.w700,
-                  fontSize: 14 * h,
-                  color: AppColor.white,
+          (me == 'user_1' && chatModel.userCount1 == 0) ||
+                  (me == 'user_2' && chatModel.userCount2 == 0)
+              ? const SizedBox()
+              : Container(
+                  height: 24 * h,
+                  width: 24 * h,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(24),
+                    color: AppColor.blue,
+                  ),
+                  child: Center(
+                    child: Text(
+                      me == 'user_1'
+                          ? chatModel.userCount1.toString()
+                          : chatModel.userCount2.toString(),
+                      style: TextStyle(
+                        fontFamily: AppColor.fontFamily,
+                        fontWeight: FontWeight.w700,
+                        fontSize: 14 * h,
+                        color: AppColor.white,
+                      ),
+                    ),
+                  ),
                 ),
-              ),
-            ),
-          ),
           SizedBox(
             width: 14 * w,
           ),
@@ -122,6 +128,11 @@ class _ChatWidgetState extends State<ChatWidget> {
   Future<void> _getData() async {
     userModel = await userBloc.getUserInfo(widget.userPhone);
     chatModel = await allChatsBloc.chatExists(widget.userPhone, widget.myPhone);
+    if (chatModel.user1 == widget.myPhone) {
+      me = 'user_1';
+    } else {
+      me = 'user_2';
+    }
     if (mounted) {
       setState(() {});
     }

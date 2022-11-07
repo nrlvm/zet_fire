@@ -20,11 +20,11 @@ class MessageWidget extends StatelessWidget {
     double h = Utils.height(context);
     double w = Utils.width(context);
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 24 * w),
+      margin: EdgeInsets.symmetric(horizontal: 24 * w),
       child: fromMe
           ? Row(
+              mainAxisAlignment: MainAxisAlignment.end,
               children: [
-                const Spacer(),
                 Text(
                   '${time.hour}.${time.minute}',
                   style: TextStyle(
@@ -36,53 +36,59 @@ class MessageWidget extends StatelessWidget {
                 SizedBox(
                   width: 24 * w,
                 ),
-                Container(
-                  padding: EdgeInsets.symmetric(
-                    horizontal: 20 * w,
-                    vertical: 15 * h,
-                  ),
-                  decoration: BoxDecoration(
-                    borderRadius: const BorderRadius.only(
-                      topLeft: Radius.circular(24),
-                      topRight: Radius.circular(0),
-                      bottomLeft: Radius.circular(24),
-                      bottomRight: Radius.circular(24),
+                Flexible(
+                  child: Container(
+                    padding: EdgeInsets.symmetric(
+                      horizontal: 20 * w,
+                      vertical: 15 * h,
                     ),
-                    color: AppColor.blue,
-                  ),
-                  child: Text(
-                    text,
-                    style: TextStyle(
-                      fontWeight: FontWeight.w600,
-                      fontSize: 14 * h,
-                      color: fromMe ? AppColor.white : AppColor.dark,
+                    decoration: BoxDecoration(
+                      borderRadius: const BorderRadius.only(
+                        topLeft: Radius.circular(24),
+                        topRight: Radius.circular(0),
+                        bottomLeft: Radius.circular(24),
+                        bottomRight: Radius.circular(24),
+                      ),
+                      color: AppColor.blue,
+                    ),
+                    child: Text(
+                      text,
+                      maxLines: 4,
+                      style: TextStyle(
+                        fontWeight: FontWeight.w600,
+                        fontSize: 14 * h,
+                        color: fromMe ? AppColor.white : AppColor.dark,
+                      ),
                     ),
                   ),
                 )
               ],
             )
           : Row(
+              mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                Container(
-                  padding: EdgeInsets.symmetric(
-                    horizontal: 20 * w,
-                    vertical: 15 * h,
-                  ),
-                  decoration: BoxDecoration(
-                    borderRadius: const BorderRadius.only(
-                      topLeft: Radius.circular(0),
-                      topRight: Radius.circular(24),
-                      bottomLeft: Radius.circular(24),
-                      bottomRight: Radius.circular(24),
+                Flexible(
+                  child: Container(
+                    padding: EdgeInsets.symmetric(
+                      horizontal: 20 * w,
+                      vertical: 15 * h,
                     ),
-                    color: AppColor.white,
-                  ),
-                  child: Text(
-                    text,
-                    style: TextStyle(
-                      fontWeight: FontWeight.w600,
-                      fontSize: 14 * h,
-                      color: fromMe ? AppColor.white : AppColor.dark,
+                    decoration: BoxDecoration(
+                      borderRadius: const BorderRadius.only(
+                        topLeft: Radius.circular(0),
+                        topRight: Radius.circular(24),
+                        bottomLeft: Radius.circular(24),
+                        bottomRight: Radius.circular(24),
+                      ),
+                      color: AppColor.white,
+                    ),
+                    child: Text(
+                      text,
+                      style: TextStyle(
+                        fontWeight: FontWeight.w600,
+                        fontSize: 14 * h,
+                        color: AppColor.dark,
+                      ),
                     ),
                   ),
                 ),
@@ -97,7 +103,6 @@ class MessageWidget extends StatelessWidget {
                     color: AppColor.grey,
                   ),
                 ),
-                const Spacer(),
               ],
             ),
     );

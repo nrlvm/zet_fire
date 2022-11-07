@@ -26,7 +26,6 @@ class _AllChatsScreenState extends State<AllChatsScreen> {
   @override
   Widget build(BuildContext context) {
     double h = Utils.height(context);
-    double w = Utils.width(context);
     return Scaffold(
       backgroundColor: AppColor.screen,
       appBar: AppBar(
@@ -125,7 +124,7 @@ class _AllChatsScreenState extends State<AllChatsScreen> {
                             MaterialPageRoute(
                               builder: (context) => ChatScreen(
                                 myPhone: widget.myPhone,
-                                chatId: chats[index].id,
+                                // chatId: chats[index].id,
                                 userPhone: chats[index].user1 == widget.myPhone
                                     ? chats[index].user2
                                     : chats[index].user1,
