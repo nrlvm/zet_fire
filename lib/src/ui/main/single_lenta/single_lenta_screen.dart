@@ -8,6 +8,7 @@ import 'package:zet_fire/src/cloud_firestore/like_cloud_fire.dart';
 import 'package:zet_fire/src/colors/app_color.dart';
 import 'package:zet_fire/src/model/lenta_model.dart';
 import 'package:zet_fire/src/model/like_model.dart';
+import 'package:zet_fire/src/ui/main/profile/user_screen.dart';
 import 'package:zet_fire/src/utils/utils.dart';
 import 'package:zet_fire/src/widget/lenta/comment_widget.dart';
 import 'package:zet_fire/src/widget/lenta/lenta_widget.dart';
@@ -91,7 +92,17 @@ class _SingleLentaScreenState extends State<SingleLentaScreen> {
                       return LentaWidget(
                         key: Key(data.commentCount.toString()),
                         data: data,
-                        openUserProfile: () {},
+                        openUserProfile: () {
+                          Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => UserScreen(
+                                userPhoneNumber: data.userPhone,
+                                myPhoneNumber: myPhone,
+                              ),
+                            ),
+                          );
+                        },
                         openInfo: () {},
                         lentaList: false,
                         likeButton: () async {
@@ -106,7 +117,6 @@ class _SingleLentaScreenState extends State<SingleLentaScreen> {
                             data.likeId = id;
                             data.likeCount++;
                           } else {
-
                             likeCloudFire.deleteLike(data.likeId);
                             data.likeId = '';
                             data.likeCount--;
