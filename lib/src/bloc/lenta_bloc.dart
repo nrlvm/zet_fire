@@ -1,8 +1,10 @@
 import 'package:rxdart/rxdart.dart';
+import 'package:zet_fire/src/cloud_firestore/block_lenta_cloud_fire.dart';
 import 'package:zet_fire/src/cloud_firestore/comment_cloud_fire.dart';
 import 'package:zet_fire/src/cloud_firestore/follower_cloud_fire.dart';
 import 'package:zet_fire/src/cloud_firestore/lenta_cloud_fire.dart';
 import 'package:zet_fire/src/cloud_firestore/like_cloud_fire.dart';
+import 'package:zet_fire/src/model/blocked_content_model.dart';
 import 'package:zet_fire/src/model/comment_model.dart';
 import 'package:zet_fire/src/model/follower_model.dart';
 import 'package:zet_fire/src/model/lenta_model.dart';
@@ -20,6 +22,8 @@ class LentaBloc {
     List<FollowerModel> followed = await followerCloudFire.allUser1(phone);
     List<CommentModel> comments = await commentCloudFire.getComments();
     List<LikeModel> allLikes = await likeCloudFire.getLikes();
+    List<BlockedContentModel> blocked =
+        await blockContentCloudFire.getBlockedContent(phone);
     List<LentaModel> lateLenta = [];
     for (int i = 0; i < lenta.length; i++) {
       for (int k = 0; k < comments.length; k++) {
@@ -35,13 +39,17 @@ class LentaBloc {
           }
         }
       }
+      for (int j = 0; j < blocked.length; j++) {
+        if (lenta[i].id == blocked[j].lentaId) {
+          lenta.remove(lenta[i]);
+        }
+      }
     }
-
     if (followed.isEmpty) {
       data = lenta;
       _fetchLenta.sink.add(data);
     } else {
-      for (int i = 0; i < lenta.length;i++) {
+      for (int i = 0; i < lenta.length; i++) {
         for (int j = 0; j < followed.length; j++) {
           if (lenta[i].userPhone == followed[j].user2) {
             lateLenta.add(lenta[i]);

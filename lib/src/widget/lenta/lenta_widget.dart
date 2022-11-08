@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
 import 'package:zet_fire/src/bloc/user_bloc.dart';
+import 'package:zet_fire/src/cloud_firestore/block_lenta_cloud_fire.dart';
 import 'package:zet_fire/src/colors/app_color.dart';
 import 'package:zet_fire/src/model/lenta_model.dart';
 import 'package:zet_fire/src/model/user_model.dart';
@@ -114,7 +115,7 @@ class _LentaWidgetState extends State<LentaWidget> {
                       ),
                     ),
                     GestureDetector(
-                      onTap: (){
+                      onTap: () {
                         showCupertinoModalPopup(
                           context: context,
                           builder: (context) => CupertinoActionSheet(
@@ -130,16 +131,17 @@ class _LentaWidgetState extends State<LentaWidget> {
                             ),
                             actions: [
                               CupertinoActionSheetAction(
-                                onPressed: () async {
-
-                                },
+                                onPressed: () async {},
                                 child: const Text(
                                   'Hide',
                                 ),
                               ),
                               CupertinoActionSheetAction(
                                 onPressed: () {
-
+                                  blockContentCloudFire.blockContent(
+                                    widget.data.id,
+                                  );
+                                  Navigator.pop(context);
                                 },
                                 isDestructiveAction: true,
                                 child: const Text(
@@ -160,7 +162,10 @@ class _LentaWidgetState extends State<LentaWidget> {
                         height: 32 * h,
                         width: 32 * h,
                         color: Colors.transparent,
-                        padding: EdgeInsets.symmetric(horizontal: 4 * w,vertical: 4 * h),
+                        padding: EdgeInsets.symmetric(
+                          horizontal: 4 * w,
+                          vertical: 4 * h,
+                        ),
                         child: SvgPicture.asset(
                           'assets/icons/more.svg',
                           alignment: AlignmentDirectional.centerEnd,
@@ -177,7 +182,6 @@ class _LentaWidgetState extends State<LentaWidget> {
             Container(
               width: MediaQuery.of(context).size.width,
               height: 2,
-              // margin: EdgeInsets.symmetric(horizontal: 20 * w),
               color: AppColor.dark.withOpacity(0.1),
             ),
             SizedBox(
