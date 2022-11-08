@@ -44,8 +44,6 @@ class ProfileWidget extends StatelessWidget {
         bottom: 30 * h,
       ),
       child: Column(
-        // mainAxisAlignment: MainAxisAlignment.start,
-        // crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Row(
             crossAxisAlignment: CrossAxisAlignment.start,

@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -54,6 +53,7 @@ class _UploadScreenState extends State<UploadScreen> {
             },
             child: Container(
               width: MediaQuery.of(context).size.width,
+              height: 200 * h,
               margin:
                   EdgeInsets.symmetric(horizontal: 16 * w, vertical: 16 * h),
               padding:
@@ -88,8 +88,8 @@ class _UploadScreenState extends State<UploadScreen> {
                       borderRadius: BorderRadius.circular(8),
                       child: Image.file(
                         File(image!.path),
-                        height: 450 * h,
-                        fit: BoxFit.cover,
+                        height: 200 * h,
+                        fit: BoxFit.fitHeight,
                       ),
                     ),
             ),
@@ -100,7 +100,7 @@ class _UploadScreenState extends State<UploadScreen> {
               focusNode: focus,
               textInputAction: TextInputAction.newline,
               keyboardType: TextInputType.multiline,
-              maxLines: null,
+              // maxLines: null,
               controller: captionController,
               style: TextStyle(
                 fontFamily: AppColor.fontFamily,
@@ -109,35 +109,16 @@ class _UploadScreenState extends State<UploadScreen> {
                 color: AppColor.dark,
               ),
               decoration: InputDecoration(
-                isDense: true,
+                // isDense: true,
                 border: InputBorder.none,
                 prefixIconConstraints: const BoxConstraints(minWidth: 56),
                 label: const Text('Caption'),
                 prefixIcon: const Icon(
                   Icons.textsms_outlined,
                 ),
-                suffix: GestureDetector(
-                  onTap: (){
-                    focus.unfocus();
-                  },
-                  child: Text(
-                    'done',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                      fontWeight: FontWeight.w500,
-                      fontSize: 16 * h,
-                      color: AppColor.dark,
-                    ),
-                  ),
-                ),
-                // labelStyle: TextStyle(
-                //   color: AppColor.red,
-                // ),
-                floatingLabelStyle: TextStyle(
-                  color: AppColor.red
-                ),
+                floatingLabelStyle: TextStyle(color: AppColor.blue),
                 focusedBorder: OutlineInputBorder(
-                  borderSide: BorderSide(color: AppColor.red, width: 2),
+                  borderSide: BorderSide(color: AppColor.blue, width: 2),
                   borderRadius: BorderRadius.circular(16),
                 ),
                 enabledBorder: OutlineInputBorder(

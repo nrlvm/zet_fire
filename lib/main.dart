@@ -34,6 +34,7 @@ class MyApp extends StatelessWidget {
       title: 'Flutter Demo',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
+        platform: TargetPlatform.iOS,
         primarySwatch: Colors.blue,
         fontFamily: AppColor.fontFamily,
       ),

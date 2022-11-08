@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
@@ -87,8 +88,6 @@ class _LentaWidgetState extends State<LentaWidget> {
                             ),
                             child: SvgPicture.asset(
                               'assets/icons/user.svg',
-                              // height: 8 * h,
-                              // width: 8 * h,
                               fit: BoxFit.scaleDown,
                               color: AppColor.dark.withOpacity(0.2),
                             ),
@@ -114,9 +113,59 @@ class _LentaWidgetState extends State<LentaWidget> {
                         ),
                       ),
                     ),
-                    SvgPicture.asset(
-                      'assets/icons/more.svg',
-                      alignment: AlignmentDirectional.centerEnd,
+                    GestureDetector(
+                      onTap: (){
+                        showCupertinoModalPopup(
+                          context: context,
+                          builder: (context) => CupertinoActionSheet(
+                            title: Text(
+                              'Would you like to hide this publication?',
+                              style: TextStyle(
+                                fontFamily: AppColor.fontFamily,
+                                fontWeight: FontWeight.w700,
+                                fontSize: 16 * h,
+                                color: AppColor.dark,
+                                decoration: TextDecoration.none,
+                              ),
+                            ),
+                            actions: [
+                              CupertinoActionSheetAction(
+                                onPressed: () async {
+
+                                },
+                                child: const Text(
+                                  'Hide',
+                                ),
+                              ),
+                              CupertinoActionSheetAction(
+                                onPressed: () {
+
+                                },
+                                isDestructiveAction: true,
+                                child: const Text(
+                                  'Report',
+                                ),
+                              ),
+                            ],
+                            cancelButton: CupertinoActionSheetAction(
+                              onPressed: () {
+                                Navigator.pop(context);
+                              },
+                              child: const Text('Cancel'),
+                            ),
+                          ),
+                        );
+                      },
+                      child: Container(
+                        height: 32 * h,
+                        width: 32 * h,
+                        color: Colors.transparent,
+                        padding: EdgeInsets.symmetric(horizontal: 4 * w,vertical: 4 * h),
+                        child: SvgPicture.asset(
+                          'assets/icons/more.svg',
+                          alignment: AlignmentDirectional.centerEnd,
+                        ),
+                      ),
                     ),
                   ],
                 ),
