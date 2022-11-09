@@ -4,7 +4,7 @@ import 'package:zet_fire/src/model/blocked_content_model.dart';
 
 class BlockContentCloudFire {
   final CollectionReference cr =
-      FirebaseFirestore.instance.collection('bloc_content');
+      FirebaseFirestore.instance.collection('block_content');
 
   Future<List<BlockedContentModel>> getBlockedContent(String userId) async {
     var data = await cr.where('user_id', isEqualTo: userId).get();

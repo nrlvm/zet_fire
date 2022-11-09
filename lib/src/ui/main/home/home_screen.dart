@@ -1,7 +1,11 @@
+import 'dart:async';
+
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:pull_to_refresh/pull_to_refresh.dart';
 import 'package:zet_fire/src/bloc/lenta_bloc.dart';
+import 'package:zet_fire/src/cloud_firestore/block_lenta_cloud_fire.dart';
 import 'package:zet_fire/src/cloud_firestore/like_cloud_fire.dart';
 import 'package:zet_fire/src/colors/app_color.dart';
 import 'package:zet_fire/src/model/lenta_model.dart';
@@ -129,6 +133,50 @@ class _HomeScreenState extends State<HomeScreen> {
                             data[index].likeCount--;
                           }
                           setState(() {});
+                        },
+                        moreButton: () {
+                          showCupertinoModalPopup(
+                            context: context,
+                            builder: (context) => CupertinoActionSheet(
+                              title: Text(
+                                'Would you like to hide this publication?',
+                                style: TextStyle(
+                                  fontFamily: AppColor.fontFamily,
+                                  fontWeight: FontWeight.w700,
+                                  fontSize: 16 * h,
+                                  color: AppColor.dark,
+                                  decoration: TextDecoration.none,
+                                ),
+                              ),
+                              actions: [
+                                CupertinoActionSheetAction(
+                                  onPressed: () async {},
+                                  child: const Text(
+                                    'Hide',
+                                  ),
+                                ),
+                                CupertinoActionSheetAction(
+                                  onPressed: () async {
+                                    lentaBloc.updateLenta(data, index);
+                                    blockContentCloudFire.blockContent(
+                                      data[index].id,
+                                    );
+                                    Navigator.pop(context);
+                                  },
+                                  isDestructiveAction: true,
+                                  child: const Text(
+                                    'Report',
+                                  ),
+                                ),
+                              ],
+                              cancelButton: CupertinoActionSheetAction(
+                                onPressed: () {
+                                  Navigator.pop(context);
+                                },
+                                child: const Text('Cancel'),
+                              ),
+                            ),
+                          );
                         },
                       );
                     },

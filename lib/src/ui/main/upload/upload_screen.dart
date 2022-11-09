@@ -44,7 +44,7 @@ class _UploadScreenState extends State<UploadScreen> {
           ),
         ),
       ),
-      body: ListView(
+      body: Column(
         children: [
           GestureDetector(
             onTap: () {

@@ -1,9 +1,7 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
 import 'package:zet_fire/src/bloc/user_bloc.dart';
-import 'package:zet_fire/src/cloud_firestore/block_lenta_cloud_fire.dart';
 import 'package:zet_fire/src/colors/app_color.dart';
 import 'package:zet_fire/src/model/lenta_model.dart';
 import 'package:zet_fire/src/model/user_model.dart';
@@ -15,6 +13,7 @@ class LentaWidget extends StatefulWidget {
   final Function() openUserProfile;
   final Function() openInfo;
   final Function() likeButton;
+  final Function() moreButton;
   final bool lentaList;
 
   const LentaWidget({
@@ -23,7 +22,7 @@ class LentaWidget extends StatefulWidget {
     required this.openUserProfile,
     required this.openInfo,
     required this.likeButton,
-    this.lentaList = true,
+    this.lentaList = true, required this.moreButton,
   }) : super(key: key);
 
   @override
@@ -43,7 +42,7 @@ class _LentaWidgetState extends State<LentaWidget> {
   @override
   Widget build(BuildContext context) {
     DateTime time = DateTime.fromMillisecondsSinceEpoch(widget.data.time);
-    String date = DateFormat('dd-MMM-yyy').format(time);
+    String date = DateFormat.yMMMMd().format(time);
     double h = Utils.height(context);
     double w = Utils.width(context);
     return GestureDetector(
@@ -115,49 +114,7 @@ class _LentaWidgetState extends State<LentaWidget> {
                       ),
                     ),
                     GestureDetector(
-                      onTap: () {
-                        showCupertinoModalPopup(
-                          context: context,
-                          builder: (context) => CupertinoActionSheet(
-                            title: Text(
-                              'Would you like to hide this publication?',
-                              style: TextStyle(
-                                fontFamily: AppColor.fontFamily,
-                                fontWeight: FontWeight.w700,
-                                fontSize: 16 * h,
-                                color: AppColor.dark,
-                                decoration: TextDecoration.none,
-                              ),
-                            ),
-                            actions: [
-                              CupertinoActionSheetAction(
-                                onPressed: () async {},
-                                child: const Text(
-                                  'Hide',
-                                ),
-                              ),
-                              CupertinoActionSheetAction(
-                                onPressed: () {
-                                  blockContentCloudFire.blockContent(
-                                    widget.data.id,
-                                  );
-                                  Navigator.pop(context);
-                                },
-                                isDestructiveAction: true,
-                                child: const Text(
-                                  'Report',
-                                ),
-                              ),
-                            ],
-                            cancelButton: CupertinoActionSheetAction(
-                              onPressed: () {
-                                Navigator.pop(context);
-                              },
-                              child: const Text('Cancel'),
-                            ),
-                          ),
-                        );
-                      },
+                      onTap: widget.moreButton,
                       child: Container(
                         height: 32 * h,
                         width: 32 * h,
@@ -212,6 +169,8 @@ class _LentaWidgetState extends State<LentaWidget> {
                 GestureDetector(
                   onTap: widget.likeButton,
                   child: Container(
+                    height: 24 * h,
+                    width: 24 * h,
                     color: Colors.transparent,
                     child: widget.data.likeId.isEmpty
                         ? SvgPicture.asset(
@@ -225,7 +184,7 @@ class _LentaWidgetState extends State<LentaWidget> {
                             'assets/icons/filled_heart.svg',
                             height: 20 * h,
                             width: 20 * h,
-                            // color: AppColor.red,
+                            color: AppColor.red,
                             fit: BoxFit.contain,
                           ),
                   ),

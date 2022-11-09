@@ -20,7 +20,6 @@ class CommentWidget extends StatefulWidget {
 class _CommentWidgetState extends State<CommentWidget> {
   UserModel user = UserModel.fromJson({});
 
-
   @override
   void initState() {
     _getData();
@@ -30,7 +29,8 @@ class _CommentWidgetState extends State<CommentWidget> {
   @override
   Widget build(BuildContext context) {
     DateTime time = DateTime.fromMillisecondsSinceEpoch(widget.model.time);
-    String date = DateFormat('dd-MMM-yyy').format(time);
+    // String date = DateFormat('dd-MMM-yyy').format(time);
+    String date = DateFormat.yMMMd().add_jm().format(time);
     double h = Utils.height(context);
     double w = Utils.width(context);
     return Container(
@@ -89,8 +89,10 @@ class _CommentWidgetState extends State<CommentWidget> {
                   ),
                   TextSpan(
                     text: '\n$date',
-                    style: const TextStyle(
-                      fontWeight: FontWeight.w400,
+                    style:  TextStyle(
+                      fontWeight: FontWeight.w100,
+                      fontSize: 12,
+                      color: AppColor.dark.withOpacity(0.6),
                     ),
                   ),
                 ],

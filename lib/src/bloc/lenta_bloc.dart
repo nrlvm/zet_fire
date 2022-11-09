@@ -61,6 +61,11 @@ class LentaBloc {
     }
   }
 
+  updateLenta(List<LentaModel> lenta, int index) async {
+    lenta.removeAt(index);
+    _fetchLenta.sink.add(lenta);
+  }
+
   updateCount(String id) {
     for (int i = 0; i < data.length; i++) {
       if (data[i].id == id) {

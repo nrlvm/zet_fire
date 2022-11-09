@@ -1,9 +1,11 @@
 import 'dart:io';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:zet_fire/src/bloc/comment_bloc.dart';
+import 'package:zet_fire/src/cloud_firestore/block_lenta_cloud_fire.dart';
 import 'package:zet_fire/src/cloud_firestore/like_cloud_fire.dart';
 import 'package:zet_fire/src/colors/app_color.dart';
 import 'package:zet_fire/src/model/lenta_model.dart';
@@ -27,12 +29,22 @@ class _SingleLentaScreenState extends State<SingleLentaScreen> {
   final TextEditingController _controller = TextEditingController();
   final ScrollController scroller = ScrollController();
   String myPhone = '';
+  bool contrIsEmpty = true;
 
   @override
   void initState() {
     data = widget.data;
     commentBloc.allComments(data);
     getMyPhone();
+    _controller.addListener(() {
+      if (_controller.text.isNotEmpty) {
+        contrIsEmpty = false;
+        setState(() {});
+      } else {
+        contrIsEmpty = true;
+        setState(() {});
+      }
+    });
     super.initState();
   }
 
@@ -123,6 +135,49 @@ class _SingleLentaScreenState extends State<SingleLentaScreen> {
                           }
                           setState(() {});
                         },
+                        moreButton: (){
+                          showCupertinoModalPopup(
+                            context: context,
+                            builder: (context) => CupertinoActionSheet(
+                              title: Text(
+                                'Would you like to hide this publication?',
+                                style: TextStyle(
+                                  fontFamily: AppColor.fontFamily,
+                                  fontWeight: FontWeight.w700,
+                                  fontSize: 16 * h,
+                                  color: AppColor.dark,
+                                  decoration: TextDecoration.none,
+                                ),
+                              ),
+                              actions: [
+                                CupertinoActionSheetAction(
+                                  onPressed: () async {},
+                                  child: const Text(
+                                    'Hide',
+                                  ),
+                                ),
+                                CupertinoActionSheetAction(
+                                  onPressed: () {
+                                    blockContentCloudFire.blockContent(
+                                      widget.data.id,
+                                    );
+                                    Navigator.pop(context);
+                                  },
+                                  isDestructiveAction: true,
+                                  child: const Text(
+                                    'Report',
+                                  ),
+                                ),
+                              ],
+                              cancelButton: CupertinoActionSheetAction(
+                                onPressed: () {
+                                  Navigator.pop(context);
+                                },
+                                child: const Text('Cancel'),
+                              ),
+                            ),
+                          );
+                        },
                       );
                     }
                     return CommentWidget(
@@ -187,6 +242,9 @@ class _SingleLentaScreenState extends State<SingleLentaScreen> {
                     color: Colors.transparent,
                     child: SvgPicture.asset(
                       'assets/icons/send.svg',
+                      color: !contrIsEmpty
+                          ? AppColor.blue
+                          : AppColor.dark,
                     ),
                   ),
                 ),
