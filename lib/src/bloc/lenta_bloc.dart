@@ -41,7 +41,7 @@ class LentaBloc {
       }
       for (int j = 0; j < blocked.length; j++) {
         if (lenta[i].id == blocked[j].lentaId) {
-          lenta.remove(lenta[i]);
+          lenta.removeAt(i);
         }
       }
     }
@@ -78,7 +78,6 @@ class LentaBloc {
 
   postPublication(LentaModel lentaModel, String phone) async {
     await lcf.postPublication(lentaModel);
-    allLenta(phone);
   }
 }
 
