@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -48,7 +49,47 @@ class _UploadScreenState extends State<UploadScreen> {
         children: [
           GestureDetector(
             onTap: () {
-              pickImage();
+              showCupertinoModalPopup(
+                context: context,
+                builder: (context) => CupertinoActionSheet(
+                  title: Text(
+                    'Would you like to pick image or video?',
+                    style: TextStyle(
+                      fontFamily: AppColor.fontFamily,
+                      fontWeight: FontWeight.w700,
+                      fontSize: 16 * h,
+                      color: AppColor.dark,
+                      decoration: TextDecoration.none,
+                    ),
+                  ),
+                  actions: [
+                    CupertinoActionSheetAction(
+                      onPressed: () async {
+                        pickImage(true);
+                        setState(() {});
+                      },
+                      child: const Text(
+                        'Image',
+                      ),
+                    ),
+                    CupertinoActionSheetAction(
+                      onPressed: () async {
+                        pickImage(false);
+                        setState(() {});
+                      },
+                      child: const Text(
+                        'Video',
+                      ),
+                    ),
+                  ],
+                  cancelButton: CupertinoActionSheetAction(
+                    onPressed: () {
+                      Navigator.pop(context);
+                    },
+                    child: const Text('Cancel'),
+                  ),
+                ),
+              );
               setState(() {});
             },
             child: Container(
@@ -62,7 +103,7 @@ class _UploadScreenState extends State<UploadScreen> {
                 borderRadius: BorderRadius.circular(16),
                 border: Border.all(color: AppColor.dark.withOpacity(0.2)),
               ),
-              child: image == null
+              child: file == null
                   ? Column(
                       mainAxisAlignment: MainAxisAlignment.center,
                       crossAxisAlignment: CrossAxisAlignment.center,
@@ -200,13 +241,19 @@ class _UploadScreenState extends State<UploadScreen> {
   }
 
   XFile? image;
+  XFile? video;
+  XFile? file;
 
-  Future pickImage() async {
+  Future pickImage(bool isImage) async {
     try {
-      final image = await ImagePicker().pickImage(source: ImageSource.gallery);
-      if (image == null) return;
+      final file = isImage
+          ? await ImagePicker().pickImage(source: ImageSource.gallery)
+          : await ImagePicker().pickVideo(source: ImageSource.gallery);
+      // final image = await ImagePicker().pickImage(source: ImageSource.gallery);
+      // final video = await ImagePicker().pickVideo(source: ImageSource.gallery);
+      if (file == null) return;
       setState(() {
-        this.image = image;
+        this.file = file;
       });
     } on PlatformException catch (e) {
       // ignore: avoid_print
