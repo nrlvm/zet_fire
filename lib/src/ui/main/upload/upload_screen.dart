@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:video_player/video_player.dart';
 import 'package:zet_fire/src/bloc/lenta_bloc.dart';
 import 'package:zet_fire/src/model/lenta_model.dart';
 import 'package:zet_fire/src/storage/storage_firebase.dart';
@@ -19,10 +20,28 @@ class UploadScreen extends StatefulWidget {
   State<UploadScreen> createState() => _UploadScreenState();
 }
 
-class _UploadScreenState extends State<UploadScreen> {
+class _UploadScreenState extends State<UploadScreen>
+    with SingleTickerProviderStateMixin {
   final captionController = TextEditingController();
-  bool loading = false;
+  final scrollController = ScrollController();
   final focus = FocusNode();
+  late VideoPlayerController videoController;
+  late AnimationController animationController;
+  bool loading = false;
+  bool photoIsChosen = true;
+  bool isPlaying = false;
+  String filePath = '';
+
+  @override
+  void initState() {
+    super.initState();
+    videoController = VideoPlayerController.network('dataSource');
+    videoController.initialize();
+    animationController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 450),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -45,7 +64,8 @@ class _UploadScreenState extends State<UploadScreen> {
           ),
         ),
       ),
-      body: Column(
+      body: ListView(
+        controller: scrollController,
         children: [
           GestureDetector(
             onTap: () {
@@ -66,6 +86,7 @@ class _UploadScreenState extends State<UploadScreen> {
                     CupertinoActionSheetAction(
                       onPressed: () async {
                         pickImage(true);
+                        photoIsChosen = true;
                         setState(() {});
                       },
                       child: const Text(
@@ -74,8 +95,16 @@ class _UploadScreenState extends State<UploadScreen> {
                     ),
                     CupertinoActionSheetAction(
                       onPressed: () async {
-                        pickImage(false);
-                        setState(() {});
+                        Navigator.pop(context);
+                        photoIsChosen = false;
+                        await pickImage(false);
+                        videoController =
+                            VideoPlayerController.file(File(file!.path));
+                        print(file!.path);
+                        videoController.setLooping(true);
+                        videoController.initialize().then((value) {
+                          setState(() {});
+                        });
                       },
                       child: const Text(
                         'Video',
@@ -93,8 +122,8 @@ class _UploadScreenState extends State<UploadScreen> {
               setState(() {});
             },
             child: Container(
-              width: MediaQuery.of(context).size.width,
-              height: 200 * h,
+              // width: MediaQuery.of(context).size.width,
+              // height: filePath == '' ? 200 * h : 450 * h,
               margin:
                   EdgeInsets.symmetric(horizontal: 16 * w, vertical: 16 * h),
               padding:
@@ -125,23 +154,50 @@ class _UploadScreenState extends State<UploadScreen> {
                         ),
                       ],
                     )
-                  : ClipRRect(
-                      borderRadius: BorderRadius.circular(8),
-                      child: Image.file(
-                        File(image!.path),
-                        height: 200 * h,
-                        fit: BoxFit.fitHeight,
-                      ),
-                    ),
+                  : photoIsChosen
+                      ? ClipRRect(
+                          borderRadius: BorderRadius.circular(8),
+                          child: Image.file(
+                            File(image!.path),
+                            height: 200 * h,
+                            fit: BoxFit.fitHeight,
+                          ),
+                        )
+                      : Stack(
+                          alignment: AlignmentDirectional.bottomCenter,
+                          children: [
+                            GestureDetector(
+                              onTap: () {
+                                setState(() {
+                                  isPlaying = !isPlaying;
+                                  isPlaying
+                                      ? videoController.pause()
+                                      : videoController.play();
+                                });
+                              },
+                              child: SizedBox(
+                                height: videoController.value.size.height,
+                                width: videoController.value.size.width,
+                                child: VideoPlayer(videoController),
+                              ),
+                            ),
+                            VideoProgressIndicator(
+                              videoController,
+                              allowScrubbing: true,
+                            ),
+                          ],
+                        ),
             ),
           ),
           Padding(
             padding: EdgeInsets.symmetric(horizontal: 16 * w),
             child: TextField(
               focusNode: focus,
+              scrollPadding: EdgeInsets.only(
+                bottom: MediaQuery.of(context).viewInsets.bottom + 24 * h,
+              ),
               textInputAction: TextInputAction.newline,
               keyboardType: TextInputType.multiline,
-              // maxLines: null,
               controller: captionController,
               style: TextStyle(
                 fontFamily: AppColor.fontFamily,
@@ -150,7 +206,6 @@ class _UploadScreenState extends State<UploadScreen> {
                 color: AppColor.dark,
               ),
               decoration: InputDecoration(
-                // isDense: true,
                 border: InputBorder.none,
                 prefixIconConstraints: const BoxConstraints(minWidth: 56),
                 label: const Text('Caption'),
@@ -177,18 +232,18 @@ class _UploadScreenState extends State<UploadScreen> {
           ),
           GestureDetector(
             onTap: () async {
-              if (image == null || captionController.text.isEmpty) {
+              if (file == null || captionController.text.isEmpty) {
                 BottomWidget.modalBottom(
-                  image == null ? 'Choose photo' : 'Write caption',
+                  file == null ? 'Choose photo' : 'Write caption',
                   'msg',
                   h,
                   w,
                   context,
                 );
-              } else if (image != null && captionController.text.isNotEmpty) {
+              } else if (file != null && captionController.text.isNotEmpty) {
                 loading = true;
                 setState(() {});
-                String url = await storageFirebase.upload("lenta", image!);
+                String url = await storageFirebase.upload("lenta", file!);
                 SharedPreferences prefs = await SharedPreferences.getInstance();
                 String phoneMe = prefs.getString('phone_number') ?? '';
                 lentaBloc.postPublication(
@@ -201,7 +256,7 @@ class _UploadScreenState extends State<UploadScreen> {
                   phoneMe,
                 );
                 loading = false;
-                image = null;
+                file = null;
                 captionController.text = '';
                 setState(() {});
               }
@@ -251,13 +306,17 @@ class _UploadScreenState extends State<UploadScreen> {
           : await ImagePicker().pickVideo(source: ImageSource.gallery);
       // final image = await ImagePicker().pickImage(source: ImageSource.gallery);
       // final video = await ImagePicker().pickVideo(source: ImageSource.gallery);
-      if (file == null) return;
+      if (file == null) {
+        print('errroorororororr');
+        return;
+      }
       setState(() {
         this.file = file;
+        filePath = this.file!.path;
       });
     } on PlatformException catch (e) {
       // ignore: avoid_print
-      print('Failed to pick img $e');
+      print('Failed to pick  $e');
     }
   }
 }
