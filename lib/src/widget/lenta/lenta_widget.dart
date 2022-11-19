@@ -22,7 +22,8 @@ class LentaWidget extends StatefulWidget {
     required this.openUserProfile,
     required this.openInfo,
     required this.likeButton,
-    this.lentaList = true, required this.moreButton,
+    this.lentaList = true,
+    required this.moreButton,
   }) : super(key: key);
 
   @override
