@@ -28,6 +28,7 @@ class _SingleLentaScreenState extends State<SingleLentaScreen> {
   LentaModel data = LentaModel.fromJson({});
   final TextEditingController _controller = TextEditingController();
   final ScrollController scroller = ScrollController();
+  FocusNode focus = FocusNode();
   String myPhone = '';
   bool contrIsEmpty = true;
 
@@ -50,8 +51,10 @@ class _SingleLentaScreenState extends State<SingleLentaScreen> {
 
   @override
   void dispose() {
-    _controller.dispose();
     super.dispose();
+    _controller.dispose();
+    scroller.dispose();
+    focus.dispose();
   }
 
   @override
@@ -133,9 +136,11 @@ class _SingleLentaScreenState extends State<SingleLentaScreen> {
                             data.likeId = '';
                             data.likeCount--;
                           }
-                          setState(() {});
+                          if (mounted) {
+                            setState(() {});
+                          }
                         },
-                        moreButton: (){
+                        moreButton: () {
                           showCupertinoModalPopup(
                             context: context,
                             builder: (context) => CupertinoActionSheet(
@@ -189,50 +194,32 @@ class _SingleLentaScreenState extends State<SingleLentaScreen> {
               },
             ),
           ),
-          Container(
-            height: 56 * h,
-            width: MediaQuery.of(context).size.width,
+          Padding(
             padding: EdgeInsets.symmetric(horizontal: 16 * w),
-            margin: EdgeInsets.only(
-              left: 16 * w,
-              right: 16 * w,
-              top: 8 * h,
-              bottom: Platform.isIOS ? 24 * h : 16 * h,
-            ),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(24),
-              border: Border.all(
-                color: AppColor.grey.withOpacity(0.2),
-                width: 2,
+            child: TextField(
+              focusNode: focus,
+              textInputAction: TextInputAction.newline,
+              keyboardType: TextInputType.multiline,
+              controller: _controller,
+              style: TextStyle(
+                fontFamily: AppColor.fontFamily,
+                fontWeight: FontWeight.w500,
+                fontSize: 16 * h,
+                color: AppColor.dark,
               ),
-            ),
-            child: Row(
-              children: [
-                Expanded(
-                  child: TextField(
-                    controller: _controller,
-                    textAlignVertical: TextAlignVertical.center,
-                    style: TextStyle(
-                      fontFamily: AppColor.fontFamily,
-                      fontWeight: FontWeight.w500,
-                      fontSize: 16 * h,
-                      color: AppColor.dark,
-                    ),
-                    decoration: InputDecoration(
-                      border: InputBorder.none,
-                      hintText: 'Write comment here ...',
-                      hintStyle: TextStyle(
-                        fontFamily: AppColor.fontFamily,
-                        fontWeight: FontWeight.w400,
-                        fontSize: 14 * h,
-                        color: AppColor.dark.withOpacity(0.5),
-                      ),
-                    ),
-                  ),
+              decoration: InputDecoration(
+                hintText: 'Write comment here ...',
+                hintStyle: TextStyle(
+                  fontFamily: AppColor.fontFamily,
+                  fontWeight: FontWeight.w400,
+                  fontSize: 14 * h,
+                  color: AppColor.dark.withOpacity(0.5),
                 ),
-                GestureDetector(
+                border: InputBorder.none,
+                suffixIcon: GestureDetector(
                   onTap: () {
                     if (_controller.text.isNotEmpty) {
+                      focus.unfocus();
                       commentBloc.saveComment(data, _controller.text);
                       _controller.clear();
                       scroller.jumpTo(scroller.position.maxScrollExtent);
@@ -242,14 +229,30 @@ class _SingleLentaScreenState extends State<SingleLentaScreen> {
                     color: Colors.transparent,
                     child: SvgPicture.asset(
                       'assets/icons/send.svg',
-                      color: !contrIsEmpty
-                          ? AppColor.blue
-                          : AppColor.dark,
+                      fit: BoxFit.scaleDown,
+                      color: !contrIsEmpty ? AppColor.blue : AppColor.dark,
                     ),
                   ),
                 ),
-              ],
+                focusedBorder: OutlineInputBorder(
+                  borderSide: BorderSide(color: AppColor.blue, width: 2),
+                  borderRadius: BorderRadius.circular(16),
+                ),
+                enabledBorder: OutlineInputBorder(
+                  borderSide: BorderSide(
+                    color: AppColor.dark.withOpacity(0.2),
+                    width: 2,
+                  ),
+                  borderRadius: BorderRadius.circular(16),
+                ),
+              ),
+              scrollPadding: EdgeInsets.only(
+                bottom: MediaQuery.of(context).viewInsets.bottom + 24 * h,
+              ),
             ),
+          ),
+          SizedBox(
+            height: Platform.isIOS ? 24 * h : 16 * h,
           ),
         ],
       ),

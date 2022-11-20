@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
+import 'package:video_player/video_player.dart';
+import 'package:zet_fire/src/bloc/lenta_bloc.dart';
+import 'package:zet_fire/src/bloc/like_bloc.dart';
 import 'package:zet_fire/src/bloc/user_bloc.dart';
 import 'package:zet_fire/src/colors/app_color.dart';
 import 'package:zet_fire/src/model/lenta_model.dart';
@@ -22,8 +25,8 @@ class LentaWidget extends StatefulWidget {
     required this.openUserProfile,
     required this.openInfo,
     required this.likeButton,
-    this.lentaList = true,
     required this.moreButton,
+    this.lentaList = true,
   }) : super(key: key);
 
   @override
@@ -32,12 +35,23 @@ class LentaWidget extends StatefulWidget {
 
 class _LentaWidgetState extends State<LentaWidget> {
   UserModel userModel = UserModel.fromJson({});
+  late VideoPlayerController videoController;
+  bool isPlaying = false;
 
   @override
   void initState() {
-    _getData();
-    if (widget.lentaList) {}
     super.initState();
+    _getData();
+    videoController = VideoPlayerController.network(widget.data.url);
+    videoController.initialize().then((value) {
+      setState(() {});
+    });
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    videoController.dispose();
   }
 
   @override
@@ -158,9 +172,36 @@ class _LentaWidgetState extends State<LentaWidget> {
             SizedBox(
               height: 12 * h,
             ),
-            CustomNetworkImage(
+            widget.data.contentType != 'video'
+                ? CustomNetworkImage(
               image: widget.data.url,
               borderRadius: BorderRadius.circular(10),
+            )
+                : Stack(
+              alignment: AlignmentDirectional.bottomCenter,
+              children: [
+                GestureDetector(
+                  onTap: () {
+                    if (mounted) {
+                      setState(() {
+                        isPlaying = !isPlaying;
+                        isPlaying
+                            ? videoController.pause()
+                            : videoController.play();
+                      });
+                    }
+                  },
+                  child: SizedBox(
+                    height: MediaQuery.of(context).size.height * 2 / 3,
+                    width: MediaQuery.of(context).size.width,
+                    child: VideoPlayer(videoController),
+                  ),
+                ),
+                VideoProgressIndicator(
+                  videoController,
+                  allowScrubbing: true,
+                ),
+              ],
             ),
             SizedBox(
               height: 20 * h,

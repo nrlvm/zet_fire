@@ -5,6 +5,7 @@ class LentaModel {
   String id;
   String caption;
   String userPhone;
+  String contentType;
   int time;
   int commentCount;
   int likeCount;
@@ -14,12 +15,13 @@ class LentaModel {
   LentaModel({
     this.id = '',
     this.likeId = '',
+    this.commentCount = 0,
+    this.likeCount = 0,
+    required this.contentType,
     required this.caption,
     required this.url,
     required this.userPhone,
     required this.time,
-    this.commentCount = 0,
-    this.likeCount = 0,
   });
 
   factory LentaModel.fromJson(Map<dynamic, dynamic> json) => LentaModel(
@@ -27,6 +29,7 @@ class LentaModel {
         userPhone: json['phone'] ?? "",
         time: json['time'] ?? 0,
         caption: json['caption'] ?? "",
+        contentType: json['content_type'] ?? "photo",
       );
 
   Map<String, dynamic> toJson() => {
@@ -34,5 +37,8 @@ class LentaModel {
         'phone': userPhone,
         'time': time,
         'caption': caption,
+        'content_type': contentType,
       };
 }
+
+/// contentType either 'photo' or 'video'

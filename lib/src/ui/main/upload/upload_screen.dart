@@ -20,13 +20,10 @@ class UploadScreen extends StatefulWidget {
   State<UploadScreen> createState() => _UploadScreenState();
 }
 
-class _UploadScreenState extends State<UploadScreen>
-    with SingleTickerProviderStateMixin {
+class _UploadScreenState extends State<UploadScreen> {
   final captionController = TextEditingController();
-  final scrollController = ScrollController();
   final focus = FocusNode();
   late VideoPlayerController videoController;
-  late AnimationController animationController;
   bool loading = false;
   bool photoIsChosen = true;
   bool isPlaying = false;
@@ -37,10 +34,14 @@ class _UploadScreenState extends State<UploadScreen>
     super.initState();
     videoController = VideoPlayerController.network('dataSource');
     videoController.initialize();
-    animationController = AnimationController(
-      vsync: this,
-      duration: const Duration(milliseconds: 450),
-    );
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    videoController.dispose();
+    captionController.dispose();
+    focus.dispose();
   }
 
   @override
@@ -65,7 +66,6 @@ class _UploadScreenState extends State<UploadScreen>
         ),
       ),
       body: ListView(
-        controller: scrollController,
         children: [
           GestureDetector(
             onTap: () {
@@ -100,7 +100,6 @@ class _UploadScreenState extends State<UploadScreen>
                         await pickImage(false);
                         videoController =
                             VideoPlayerController.file(File(file!.path));
-                        print(file!.path);
                         videoController.setLooping(true);
                         videoController.initialize().then((value) {
                           setState(() {});
@@ -158,7 +157,7 @@ class _UploadScreenState extends State<UploadScreen>
                       ? ClipRRect(
                           borderRadius: BorderRadius.circular(8),
                           child: Image.file(
-                            File(image!.path),
+                            File(file!.path),
                             height: 200 * h,
                             fit: BoxFit.fitHeight,
                           ),
@@ -176,8 +175,9 @@ class _UploadScreenState extends State<UploadScreen>
                                 });
                               },
                               child: SizedBox(
-                                height: videoController.value.size.height,
-                                width: videoController.value.size.width,
+                                height:
+                                    MediaQuery.of(context).size.height * 2 / 3,
+                                width: MediaQuery.of(context).size.width,
                                 child: VideoPlayer(videoController),
                               ),
                             ),
@@ -242,6 +242,7 @@ class _UploadScreenState extends State<UploadScreen>
                 );
               } else if (file != null && captionController.text.isNotEmpty) {
                 loading = true;
+                videoController.pause();
                 setState(() {});
                 String url = await storageFirebase.upload("lenta", file!);
                 SharedPreferences prefs = await SharedPreferences.getInstance();
@@ -252,6 +253,7 @@ class _UploadScreenState extends State<UploadScreen>
                     userPhone: prefs.getString('phone_number') ?? '',
                     time: DateTime.now().millisecondsSinceEpoch,
                     caption: captionController.text,
+                    contentType: photoIsChosen ? 'photo' : 'video',
                   ),
                   phoneMe,
                 );
@@ -288,6 +290,9 @@ class _UploadScreenState extends State<UploadScreen>
             ),
           ),
           SizedBox(
+            height: MediaQuery.of(context).viewInsets.bottom,
+          ),
+          SizedBox(
             height: 24 * h,
           ),
         ],
@@ -295,8 +300,6 @@ class _UploadScreenState extends State<UploadScreen>
     );
   }
 
-  XFile? image;
-  XFile? video;
   XFile? file;
 
   Future pickImage(bool isImage) async {
@@ -304,10 +307,7 @@ class _UploadScreenState extends State<UploadScreen>
       final file = isImage
           ? await ImagePicker().pickImage(source: ImageSource.gallery)
           : await ImagePicker().pickVideo(source: ImageSource.gallery);
-      // final image = await ImagePicker().pickImage(source: ImageSource.gallery);
-      // final video = await ImagePicker().pickVideo(source: ImageSource.gallery);
       if (file == null) {
-        print('errroorororororr');
         return;
       }
       setState(() {
