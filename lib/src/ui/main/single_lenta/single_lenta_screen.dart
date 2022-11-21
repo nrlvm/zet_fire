@@ -40,10 +40,14 @@ class _SingleLentaScreenState extends State<SingleLentaScreen> {
     _controller.addListener(() {
       if (_controller.text.isNotEmpty) {
         contrIsEmpty = false;
-        setState(() {});
+        if(mounted){
+          setState(() {});
+        }
       } else {
         contrIsEmpty = true;
-        setState(() {});
+        if(mounted){
+          setState(() {});
+        }
       }
     });
     super.initState();

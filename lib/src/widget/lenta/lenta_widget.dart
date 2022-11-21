@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
 import 'package:video_player/video_player.dart';
-import 'package:zet_fire/src/bloc/lenta_bloc.dart';
-import 'package:zet_fire/src/bloc/like_bloc.dart';
 import 'package:zet_fire/src/bloc/user_bloc.dart';
 import 'package:zet_fire/src/colors/app_color.dart';
 import 'package:zet_fire/src/model/lenta_model.dart';

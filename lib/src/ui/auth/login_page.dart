@@ -6,11 +6,13 @@ import 'package:zet_fire/src/utils/utils.dart';
 class LoginPage extends StatefulWidget {
   final Function(String phone) phone;
   final Function(String password) password;
+  final Function() signGoogle;
 
   const LoginPage({
     Key? key,
     required this.phone,
     required this.password,
+    required this.signGoogle,
   }) : super(key: key);
 
   @override
@@ -151,6 +153,67 @@ class _LoginPageState extends State<LoginPage> {
               ),
             ),
           ),
+          SizedBox(
+            height: 24 * h,
+          ),
+          Row(
+            children: [
+              Expanded(
+                child: Container(
+                  height: 2,
+                  color: AppColor.grey.withOpacity(0.3),
+                  margin: EdgeInsets.symmetric(horizontal: 20 * w),
+                ),
+              ),
+              Text(
+                'Or login with',
+                style: TextStyle(
+                  fontWeight: FontWeight.w400,
+                  fontSize: 14 * h,
+                ),
+              ),
+              Expanded(
+                child: Container(
+                  height: 2,
+                  color: AppColor.grey.withOpacity(0.3),
+                  margin: EdgeInsets.symmetric(horizontal: 20 * w),
+                ),
+              ),
+            ],
+          ),
+          SizedBox(
+            height: 20 * h,
+          ),
+          GestureDetector(
+            onTap: widget.signGoogle,
+            child: Container(
+              height: 56 * h,
+              width: MediaQuery.of(context).size.width,
+              padding: EdgeInsets.symmetric(horizontal: 20 * w),
+              margin: EdgeInsets.symmetric(horizontal: 25 * w),
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(28 * h),
+                color: AppColor.white,
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  SvgPicture.asset('assets/icons/google.svg'),
+                  SizedBox(
+                    width: 16 * w,
+                  ),
+                  Text(
+                    'Google',
+                    style: TextStyle(
+                      fontWeight: FontWeight.w700,
+                      fontSize: 18 * h,
+                      color: AppColor.dark,
+                    ),
+                  )
+                ],
+              ),
+            ),
+          )
         ],
       ),
     );

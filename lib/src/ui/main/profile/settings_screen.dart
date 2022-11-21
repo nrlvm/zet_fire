@@ -6,7 +6,6 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:zet_fire/src/bloc/auth_bloc.dart';
 import 'package:zet_fire/src/colors/app_color.dart';
-import 'package:zet_fire/src/fire_auth/auth_user_repository.dart';
 import 'package:zet_fire/src/model/user_model.dart';
 import 'package:zet_fire/src/ui/auth/main_auth_screen.dart';
 import 'package:zet_fire/src/utils/utils.dart';
@@ -85,12 +84,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     ),
                     actions: [
                       CupertinoDialogAction(
-                        child: Text(
-                          'yes',
-                          style: TextStyle(color: AppColor.red),
-                        ),
                         onPressed: () async {
-                          authUserRepository.signOut();
                           SharedPreferences prefs =
                               await SharedPreferences.getInstance();
                           prefs.clear();
@@ -101,6 +95,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
                               ),
                               (route) => false);
                         },
+                        isDestructiveAction: true,
+                        child: const Text(
+                          'yes',
+                        ),
                       ),
                       CupertinoDialogAction(
                         child: const Text('no'),

@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:zet_fire/src/auth/auth_repo.dart';
 import 'package:zet_fire/src/bloc/auth_bloc.dart';
 import 'package:zet_fire/src/colors/app_color.dart';
 import 'package:zet_fire/src/model/user_model.dart';
@@ -21,6 +22,8 @@ class MainAuthScreen extends StatefulWidget {
 class _MainAuthScreenState extends State<MainAuthScreen> {
   final controller = PageController();
   bool k = true;
+
+  String googleEmail = '';
   String phoneLog = '';
   String passwordLog = '';
 
@@ -182,6 +185,11 @@ class _MainAuthScreenState extends State<MainAuthScreen> {
                   },
                   password: (String password) {
                     passwordLog = password;
+                  },
+                  signGoogle: () async {
+                    print(googleEmail);
+                    googleEmail = await authRepo.handleSignIn();
+
                   },
                 ),
                 SignUpPage(

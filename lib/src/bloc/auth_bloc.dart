@@ -8,10 +8,7 @@ import 'package:zet_fire/src/storage/storage_firebase.dart';
 class AuthBloc {
   final UsersCloudFire cloudFireUser = UsersCloudFire();
 
-  Future<bool> logIn(
-    String phoneNumber,
-    String password,
-  ) async {
+  Future<bool> logIn(String phoneNumber, String password) async {
     bool k = false;
     List<UserModel> data = await cloudFireUser.getUsers(phoneNumber);
     for (int i = 0; i < data.length; i++) {

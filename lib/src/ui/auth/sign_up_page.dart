@@ -32,8 +32,6 @@ class _SignUpPageState extends State<SignUpPage> {
     return Scaffold(
       backgroundColor: AppColor.appbar,
       body: ListView(
-        // crossAxisAlignment: CrossAxisAlignment.start,
-        // mainAxisAlignment: MainAxisAlignment.start,
         children: [
           Padding(
             padding: EdgeInsets.only(left: 25 * h),
@@ -210,6 +208,10 @@ class _SignUpPageState extends State<SignUpPage> {
               ),
             ),
           ),
+          SizedBox(
+            height: 24 * h,
+          ),
+
         ],
       ),
     );

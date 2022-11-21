@@ -46,6 +46,7 @@ class _ExploreScreenState extends State<ExploreScreen> {
         builder: (context, snapshot) {
           if (snapshot.hasData) {
             List<LentaModel> data = snapshot.data!;
+            data.removeWhere((element) => element.contentType == 'video');
             return MasonryGridView.count(
               padding: EdgeInsets.only(
                 left: 12 * w,
@@ -73,11 +74,24 @@ class _ExploreScreenState extends State<ExploreScreen> {
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(8),
                     ),
-                    child: CustomNetworkImage(
-                      image: data[index].url,
-                      boxFit: BoxFit.fitWidth,
-                      borderRadius: BorderRadius.circular(8),
-                    ),
+                    child: data[index].contentType != 'video'
+                        ? CustomNetworkImage(
+                            image: data[index].url,
+                            boxFit: BoxFit.fitWidth,
+                            borderRadius: BorderRadius.circular(8),
+                          )
+                        : Container(
+                            height:
+                                (MediaQuery.of(context).size.width - 12) / 4,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(8),
+                              color: AppColor.grey.withOpacity(0.45),
+                            ),
+                            child: const Icon(
+                              Icons.play_arrow_rounded,
+                              size: 36,
+                            ),
+                          ),
                   ),
                 );
               },
