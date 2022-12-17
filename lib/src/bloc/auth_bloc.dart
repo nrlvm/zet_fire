@@ -1,5 +1,4 @@
 import 'dart:async';
-
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:zet_fire/src/cloud_firestore/user_cloud_fire.dart';
 import 'package:zet_fire/src/model/user_model.dart';

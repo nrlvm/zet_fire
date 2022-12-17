@@ -55,7 +55,7 @@ class _MainScreenState extends State<MainScreen> {
         MyProfileScreen(
           phoneMe: myPhone,
         ),
-      ][_selectedIndex],
+      ].elementAt(_selectedIndex),
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
           _selectedIndex = 2;
@@ -215,16 +215,14 @@ class _MainScreenState extends State<MainScreen> {
                         SizedBox(
                           height: 8 * h,
                         ),
-                        _selectedIndex == 4
-                            ? Container(
+                        if (_selectedIndex == 4) Container(
                                 height: 6 * h,
                                 width: 6 * h,
                                 decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(6),
                                   color: AppColor.blue,
                                 ),
-                              )
-                            : SizedBox(
+                              ) else SizedBox(
                                 height: 6 * h,
                               ),
                       ],

@@ -6,6 +6,8 @@ class BottomWidget {
   static void modalBottom(
     String title,
     String msg,
+    String buttonText,
+    Function() onTapButton,
     double h,
     double w,
     BuildContext context,
@@ -69,9 +71,7 @@ class BottomWidget {
             ),
             const Spacer(),
             GestureDetector(
-              onTap: () {
-                Navigator.pop(context);
-              },
+              onTap: onTapButton,
               child: Container(
                 margin: EdgeInsets.symmetric(horizontal: 25 * w),
                 width: MediaQuery.of(context).size.width,
@@ -82,7 +82,7 @@ class BottomWidget {
                 ),
                 child: Center(
                   child: Text(
-                    'Try Again',
+                    buttonText,
                     style: TextStyle(
                       fontFamily: AppColor.fontFamily,
                       fontWeight: FontWeight.w700,

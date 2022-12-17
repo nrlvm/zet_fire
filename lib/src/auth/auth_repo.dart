@@ -12,10 +12,12 @@ class AuthRepo {
   Future<String> handleSignIn() async {
     String email = '';
     try {
-      GoogleSignInAccount data = (await _gSI.signIn())!;
-      email = data.email;
-    } catch (error) {
-      print(error);
+      GoogleSignInAccount? data = await _gSI.signIn();
+      if (data != null) {
+        email = data.email;
+      }
+    } catch (e) {
+      print(e);
     }
     return email;
   }

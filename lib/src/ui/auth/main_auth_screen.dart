@@ -187,9 +187,47 @@ class _MainAuthScreenState extends State<MainAuthScreen> {
                     passwordLog = password;
                   },
                   signGoogle: () async {
-                    print(googleEmail);
                     googleEmail = await authRepo.handleSignIn();
-
+                    if (googleEmail != '') {
+                      bool k = await authBloc.logIn(
+                        googleEmail,
+                        'custom_password',
+                      );
+                      if (k) {
+                        Navigator.pushAndRemoveUntil(
+                          this.context,
+                          MaterialPageRoute(
+                            builder: (context) => const MainScreen(),
+                          ),
+                          (route) => false,
+                        );
+                      } else {
+                        BottomWidget.modalBottom(
+                          'Login failed',
+                          'You have not got account\nWould you like to create now?',
+                          'Yes',
+                          () async {
+                            await authBloc.saveUser(
+                              UserModel(
+                                userName: '',
+                                phone: googleEmail,
+                                password: 'custom_password',
+                              ),
+                            );
+                            Navigator.pushAndRemoveUntil(
+                              this.context,
+                              MaterialPageRoute(
+                                builder: (context) => const MainScreen(),
+                              ),
+                              (route) => false,
+                            );
+                          },
+                          h,
+                          w,
+                          this.context,
+                        );
+                      }
+                    }
                   },
                 ),
                 SignUpPage(
@@ -225,6 +263,8 @@ class _MainAuthScreenState extends State<MainAuthScreen> {
                       BottomWidget.modalBottom(
                         'Login failed',
                         'Either phone number or password wrong',
+                        'Try Again',
+                        () => Navigator.pop(context),
                         h,
                         w,
                         this.context,
@@ -235,11 +275,13 @@ class _MainAuthScreenState extends State<MainAuthScreen> {
                     });
                   } else if (phoneLog.isEmpty || passwordLog.isEmpty) {
                     BottomWidget.modalBottom(
-                      'Login Failed',
+                      'Login failed',
                       'Write down phone number and password',
+                      'Try Again',
+                      () => Navigator.pop(context),
                       h,
                       w,
-                      context,
+                      this.context,
                     );
                   }
                 } else if (controller.page == 1) {
@@ -269,6 +311,8 @@ class _MainAuthScreenState extends State<MainAuthScreen> {
                       BottomWidget.modalBottom(
                         'User Exists',
                         'User with this phone number is already registered',
+                        'Try Again',
+                        () => Navigator.pop(context),
                         h,
                         w,
                         this.context,
@@ -282,9 +326,11 @@ class _MainAuthScreenState extends State<MainAuthScreen> {
                     BottomWidget.modalBottom(
                       'Sign up failed',
                       'Write down the username, phone number and password',
+                      'Try Again',
+                      () => Navigator.pop(context),
                       h,
                       w,
-                      context,
+                      this.context,
                     );
                   }
                 }

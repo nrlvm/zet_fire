@@ -236,6 +236,8 @@ class _UploadScreenState extends State<UploadScreen> {
                 BottomWidget.modalBottom(
                   file == null ? 'Choose photo' : 'Write caption',
                   'msg',
+                  'Try again',
+                  () => Navigator.pop(context),
                   h,
                   w,
                   context,

@@ -324,6 +324,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     BottomWidget.modalBottom(
                       'Save Failed',
                       'Set up at least username',
+                      'Try again',
+                      ()=> Navigator.pop(context),
                       h,
                       w,
                       context,
